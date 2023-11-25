@@ -1,8 +1,10 @@
-#include<iostream>
+// main.cpp
+#include "include/Task.h"
+#include <iostream>
 
+int main() {
+    TaskManager taskManager;
+    taskManager.runMenu();
 
-int main()
-{
-    std::cout << "Hello World!" << std::endl;
     return 0;
 }
