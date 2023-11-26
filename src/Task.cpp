@@ -10,7 +10,7 @@ TaskManager::TaskManager(const std::string& filename) : task_filename(filename) 
 
 // Destructor
 TaskManager::~TaskManager() {
-    saveTasksToFile();
+    //saveTasksToFile();
 }
 
 void TaskManager::addTask() {
@@ -36,6 +36,14 @@ void TaskManager::addTask() {
     newTask.creationDate = ctime(&now); // Convert to string
     newTask.creationDate.pop_back();
 
+    // ask the user if they are sure they want to add the task
+    char choice;
+    cout << "Are you sure you want to add this task? (y/n): ";
+    cin >> choice;
+    if (tolower(choice) != 'y' && tolower(choice) != 'Y') {
+        cout << "Task not added.\n";
+        return;
+    }
     tasks.push_back(newTask);
 
     std::cout << "Task added successfully!\n";
@@ -66,23 +74,39 @@ void TaskManager::editTask() {
     });
 
     if (it != tasks.end()) {
+        Task editedTask = *it;  // Create a copy of the original task
+
         cout << "Enter new task title: ";
-        getline(cin, it->title);
+        getline(cin, editedTask.title);
 
         cout << "Enter new task description: ";
-        getline(cin, it->description);
+        getline(cin, editedTask.description);
 
         cout << "Enter new task deadline: ";
-        getline(cin, it->deadline);
+        getline(cin, editedTask.deadline);
 
         cout << "Enter new task priority (1-5): ";
-        cin >> it->priority;
+        cin >> editedTask.priority;
 
-        cout << "Task edited successfully!\n";
+        // Ask the user if they want to save changes
+        char saveChoice;
+        cout << "Are you sure you want to save the changes? (y/n): ";
+        cin >> saveChoice;
+
+        if (tolower(saveChoice) == 'y') {
+            // If user chooses to save, update the original task
+            *it = editedTask;
+            //saveTasksToFile();  // Save changes immediately
+            cout << "Changes saved!\n";
+        } else {
+            // If user chooses not to save, discard the changes
+            cout << "Changes discarded.\n";
+        }
     } else {
         cout << "Task not found.\n";
     }
 }
+
 
 void TaskManager::deleteTask() {
     string searchTitle;
@@ -95,12 +119,32 @@ void TaskManager::deleteTask() {
     });
 
     if (it != tasks.end()) {
-        tasks.erase(it);
-        cout << "Task deleted successfully!\n";
+        // Display task details
+        cout << "Task details:\n";
+        cout << "Title: " << it->title << "\n";
+        cout << "Description: " << it->description << "\n";
+        cout << "Deadline: " << it->deadline << "\n";
+        cout << "Priority: " << it->priority << "\n";
+        cout << "Status: " << (it->completed ? "Completed" : "Incomplete") << "\n";
+        cout << "Creation Date: " << it->creationDate << "\n";
+        cout << "-----------------\n";
+
+        // Ask the user for confirmation
+        char deleteChoice;
+        cout << "Are you sure you want to delete this task? (y/n): ";
+        cin >> deleteChoice;
+
+        if (tolower(deleteChoice) == 'y') {
+            tasks.erase(it);
+            cout << "Task deleted successfully!\n";
+        } else {
+            cout << "Deletion canceled.\n";
+        }
     } else {
         cout << "Task not found.\n";
     }
 }
+
 
 void TaskManager::markTaskCompleted() {
     string searchTitle;
@@ -221,9 +265,10 @@ void TaskManager::runWindow() {
         std::cout << "4. Delete Task\n";
         std::cout << "5. Mark Task as Completed\n";
         std::cout << "6. Search Tasks by Keyword\n";
-        std::cout << "7. Save and Quit\n";
-        std::cout << "8. Quit without Saving\n";
-        std::cout << "Enter your choice (1-7): ";
+        std::cout << "7. Save Current Changes to File\n";
+        std::cout << "8. Save and Quit\n";
+        std::cout << "9. Quit without Saving\n";
+        std::cout << "Enter your choice (1-9): ";
         std::cin >> choice;
 
         switch (choice) {
@@ -247,13 +292,17 @@ void TaskManager::runWindow() {
                 break;
             case 7:
                 saveTasksToFile();
-                std::cout << "Tasks saved. Exiting program.\n";
+                std::cout << "Tasks saved. \n";
                 break;
             case 8:
+                saveTasksToFile();
+                std::cout << "Tasks saved. Exiting program.\n";
+                break;
+            case 9:
                 std::cout << "Exiting program.\n";
                 break;
             default:
                 std::cout << "Invalid choice. Please enter a number between 1 and 6.\n";
         }
-    } while (choice != 8 && choice != 7);
+    } while (choice != 8 && choice != 9);
 }
