@@ -4,9 +4,9 @@
 
 // Function to add a new task
 void addTask(vector<Task>& tasks) {
-    Task newTask;
+    Task newTask;   // Create a new empty-valued task
     
-    cout << "Enter task title: ";
+    cout << "Enter task title: ";   
     getline(cin, newTask.title);
     
     cout << "Enter task description: ";

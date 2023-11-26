@@ -3,11 +3,10 @@
 
 int main() {
     vector<Task> tasks;
-    const string filename = "tasks.txt";
+    const string task_filename = "storage/tasks.txt";
 
-    loadTasksFromFile(tasks, filename);
-
-    task_runwindow(tasks, filename);
+    loadTasksFromFile(tasks, task_filename);
+    task_runwindow(tasks, task_filename);
 
     return 0;
 }

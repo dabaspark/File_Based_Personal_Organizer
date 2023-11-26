@@ -10,11 +10,11 @@ using namespace std;
 
 // Define the structure for a task
 struct Task {
-    string title;
-    string description;
-    string deadline;
-    int priority;
-    bool completed;
+    string title;       // Title of the task
+    string description; // Description of the task
+    string deadline;    // Deadline of the task
+    int priority;       // Priority of the task
+    bool completed;     // Status of the task
 };
 
 // Function to add a new task
