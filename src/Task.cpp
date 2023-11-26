@@ -330,10 +330,36 @@ string TaskManager::enterTaskTitle() const {
     std::string title;
     std::cin.ignore();
     std::getline(std::cin, title);
+    
+    // check if the title is empty
+    // check if the title is spaces only and if so ask the user to enter a valid title
+    // check if the title is already used if so ask the user to enter a valid title
+    // Check if the title starts with a number
+    // or if it consists only of numbers
+    while (
+    title.empty() ||
+    std::all_of(title.begin(), title.end(), [](char c) { return std::isspace(c); }) ||
+    std::any_of(tasks.begin(), tasks.end(), [&title](const Task& task) { return task.title == title; }) ||
+    std::isdigit(title.front()) ||
+    std::all_of(title.begin(), title.end(), [](char c) { return std::isdigit(c); })
+    ) {
+        if (title.empty() || std::all_of(title.begin(), title.end(), [](char c) { return std::isspace(c); })) {
+            std::cout << "Title cannot be empty or consist of spaces only. Please enter a valid title: ";
+        } else if (std::any_of(tasks.begin(), tasks.end(), [&title](const Task& task) { return task.title == title; })) {
+            std::cout << "Title already used. Please enter a different title: ";
+        } else if (std::isdigit(title.front()) || std::all_of(title.begin(), title.end(), [](char c) { return std::isdigit(c); })) {
+            std::cout << "Title cannot start with a number or consist only of numbers. Please enter a valid title: ";
+        } else {
+            // Currently, this else block covers the generic case of an invalid title.
+            std::cout << "Invalid title. Please enter a valid title: ";
+        }
+        std::getline(std::cin, title);
+    }
+
     return title;
 }
 
-// Utility function to enter task description
+// Utility function for addTask and editTask
 string TaskManager::enterTaskDescription() const {
     std::cout << "Enter task description: ";
     std::string description;
@@ -341,20 +367,115 @@ string TaskManager::enterTaskDescription() const {
     return description;
 }
 
-// Utility function to enter task deadline
-string TaskManager::enterTaskDeadline() const {
-    std::cout << "Enter task deadline: ";
+
+std::string TaskManager::enterTaskDeadline() const {
+    std::cout << "Enter task deadline (YYYY-MM-DD): ";
     std::string deadline;
-    std::getline(std::cin, deadline);
+    do {
+        std::getline(std::cin, deadline);
+        if (deadline.empty()) {
+            std::cout << "Error: Deadline cannot be empty. Please enter a valid deadline (YYYY-MM-DD): ";
+        } else if (!isValidDateFormat(deadline)) {
+            std::cout << "Error: Invalid date format. Please enter a valid deadline (YYYY-MM-DD): ";
+        } else if (isPastDeadline(deadline)) {
+            std::cout << "Error: Deadline cannot be in the past. Please enter a future deadline: ";
+        }
+    } while (deadline.empty() || !isValidDateFormat(deadline) || isPastDeadline(deadline));
     return deadline;
 }
 
-// Utility function to enter task priority
+// enter task priority
+
 int TaskManager::enterTaskPriority() const {
     int priority;
+    bool isValidInput;
+
     do {
+        isValidInput = true; // Assume input is valid unless proven otherwise
+
         std::cout << "Enter task priority (1-5): ";
-        std::cin >> priority;
-    } while (priority < 1 || priority > 5);
+
+        std::string input;
+        std::getline(std::cin, input);
+
+        // Check if the input is empty
+        if (input.empty()) {
+            std::cout << "Invalid input. Please enter a value.\n";
+            isValidInput = false;
+            continue;  // Skip the rest of the loop for empty input
+        }
+
+        // Check if the input consists only of digits
+        if (!std::all_of(input.begin(), input.end(), ::isdigit)) {
+            std::cout << "Invalid input. Please enter a valid integer.\n";
+            isValidInput = false;
+            continue;  // Skip the rest of the loop for non-numeric input
+        }
+
+        try {
+            size_t pos;
+            priority = std::stoi(input, &pos);
+
+            // Check if the entire input was converted to an integer
+            if (pos < input.size()) {
+                throw std::invalid_argument("Invalid input. Please enter an integer.");
+            }
+
+            // Check if the input is within the valid range
+            if (priority < 1 || priority > 5) {
+                std::cout << "Invalid input. Priority must be between 1 and 5.\n";
+                isValidInput = false;
+            }
+
+        } catch (const std::invalid_argument& e) {
+            std::cout << e.what() << "\n";
+            isValidInput = false;
+        } catch (const std::out_of_range& e) {
+            std::cout << "Invalid input. Entered value is out of range for integer.\n";
+            isValidInput = false;
+        }
+
+    } while (!isValidInput);
+
     return priority;
+}
+
+// utlitity function to enterTaskDeadline function
+
+// Utility function to check if the date has a valid format (YYYY-MM-DD)
+bool TaskManager::isValidDateFormat(const std::string& date) const {
+    std::tm testDate = {};
+    std::istringstream ss(date);
+
+    // Parse the date components manually
+    ss >> std::get_time(&testDate, "%Y-%m-%d");
+
+    // Check if the entire input string is consumed and date components are valid
+    return !ss.fail() && ss.eof() && isValidDate(testDate.tm_year + 1900, testDate.tm_mon + 1, testDate.tm_mday);
+}
+
+// Utility function to check if the deadline is in the past
+bool TaskManager::isPastDeadline(const std::string& deadline) const {
+    std::tm deadlineDate = {};
+    std::istringstream ss(deadline);
+
+    // Parse the deadline components manually
+    if (ss >> std::get_time(&deadlineDate, "%Y-%m-%d")) {
+        // Check if the extracted date components are valid
+        if (isValidDate(deadlineDate.tm_year + 1900, deadlineDate.tm_mon + 1, deadlineDate.tm_mday)) {
+            // Get the current time
+            auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+
+            // Compare the deadline date with the current date
+            return std::mktime(&deadlineDate) < now;
+        }
+    }
+
+    return false; // Invalid date format, handled separately
+}
+
+    // Check if the date components are valid
+bool TaskManager::isValidDate(int year, int month, int day) const {
+    // Some basic validation
+    return (year >= 1900 && month >= 1 && month <= 12 && day >= 1 && day <= 31);
 }

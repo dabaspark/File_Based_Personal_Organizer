@@ -7,6 +7,9 @@
 #include <algorithm>
 #include <chrono>  // for date and time operations
 #include <cctype>  //for task keywork search // for character classification functions
+#include <sstream> // for string stream operations
+#include <ctime>    // for time operations
+#include <iomanip>  // for date and time formatting
 
 using namespace std;
 
@@ -65,6 +68,12 @@ private:
     string enterTaskDescription() const;
     string enterTaskDeadline() const;
     int enterTaskPriority() const;
+
+    // Utility function for enterTaskDeadline function
+    bool isValidDateFormat(const std::string& date) const;
+    bool isPastDeadline(const std::string& deadline) const;
+    bool isValidDate(int year, int month, int day) const;
+
 };
 
 #endif // TASK_H
