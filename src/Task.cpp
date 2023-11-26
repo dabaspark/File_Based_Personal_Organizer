@@ -6,6 +6,7 @@
 // Constructor
 TaskManager::TaskManager(const std::string& filename) : task_filename(filename) {
     loadTasksFromFile();
+    unsavedChanges = false;
 }
 
 // Destructor
@@ -16,25 +17,15 @@ TaskManager::~TaskManager() {
 void TaskManager::addTask() {
     Task newTask;
 
-    std::cout << "Enter task title: ";
-    std::cin.ignore(); // Clear the newline character from the buffer
-    std::getline(std::cin, newTask.title);
-
-    std::cout << "Enter task description: ";
-    std::getline(std::cin, newTask.description);
-
-    std::cout << "Enter task deadline: ";
-    std::getline(std::cin, newTask.deadline);
-
-    std::cout << "Enter task priority (1-5): ";
-    std::cin >> newTask.priority;
-
+    newTask.title = enterTaskTitle();
+    newTask.description = enterTaskDescription();
+    newTask.deadline = enterTaskDeadline();
+    newTask.priority = enterTaskPriority();
     newTask.completed = false;
 
-    // Get the current date
     auto now = chrono::system_clock::to_time_t(chrono::system_clock::now());
     newTask.creationDate = ctime(&now); // Convert to string
-    newTask.creationDate.pop_back();
+    newTask.creationDate.pop_back(); // Remove the newline character
 
     // ask the user if they are sure they want to add the task
     char choice;
@@ -45,7 +36,7 @@ void TaskManager::addTask() {
         return;
     }
     tasks.push_back(newTask);
-
+    unsavedChanges = true;
     std::cout << "Task added successfully!\n";
 }
 
@@ -76,17 +67,10 @@ void TaskManager::editTask() {
     if (it != tasks.end()) {
         Task editedTask = *it;  // Create a copy of the original task
 
-        cout << "Enter new task title: ";
-        getline(cin, editedTask.title);
-
-        cout << "Enter new task description: ";
-        getline(cin, editedTask.description);
-
-        cout << "Enter new task deadline: ";
-        getline(cin, editedTask.deadline);
-
-        cout << "Enter new task priority (1-5): ";
-        cin >> editedTask.priority;
+        editedTask.title = enterTaskTitle();
+        editedTask.description = enterTaskDescription();
+        editedTask.deadline = enterTaskDeadline();
+        editedTask.priority = enterTaskPriority();
 
         // Ask the user if they want to save changes
         char saveChoice;
@@ -98,6 +82,7 @@ void TaskManager::editTask() {
             *it = editedTask;
             //saveTasksToFile();  // Save changes immediately
             cout << "Changes saved!\n";
+            unsavedChanges = true;
         } else {
             // If user chooses not to save, discard the changes
             cout << "Changes discarded.\n";
@@ -137,6 +122,7 @@ void TaskManager::deleteTask() {
         if (tolower(deleteChoice) == 'y') {
             tasks.erase(it);
             cout << "Task deleted successfully!\n";
+            unsavedChanges = true;
         } else {
             cout << "Deletion canceled.\n";
         }
@@ -159,6 +145,7 @@ void TaskManager::markTaskCompleted() {
     if (it != tasks.end()) {
         it->completed = true;
         cout << "Task marked as completed!\n";
+        unsavedChanges = true;
     } else {
         cout << "Task not found.\n";
     }
@@ -258,6 +245,14 @@ void TaskManager::runWindow() {
     int choice;
 
     do {
+        std::cout << "Number of tasks: " << tasks.size() <<", "
+            << "Completed tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
+                return task.completed;
+            }) << ", " << "Incomplete tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
+                return !task.completed;
+            })<< ", " << "File Status: " << (unsavedChanges ? "New changes not saved to the file" : "Up to Date") << "\n";
+
+        std::cout << "====================\n";
         std::cout << "Menu:\n";
         std::cout << "1. Add Task\n";
         std::cout << "2. Display Tasks\n";
@@ -268,6 +263,9 @@ void TaskManager::runWindow() {
         std::cout << "7. Save Current Changes to File\n";
         std::cout << "8. Save and Quit\n";
         std::cout << "9. Quit without Saving\n";
+
+        
+
         std::cout << "Enter your choice (1-9): ";
         std::cin >> choice;
 
@@ -293,16 +291,70 @@ void TaskManager::runWindow() {
             case 7:
                 saveTasksToFile();
                 std::cout << "Tasks saved. \n";
+                unsavedChanges = false;
                 break;
             case 8:
                 saveTasksToFile();
                 std::cout << "Tasks saved. Exiting program.\n";
                 break;
             case 9:
-                std::cout << "Exiting program.\n";
+                if (unsavedChanges) {
+                    char exitChoice;
+                    std::cout << "Are you sure you want to exit without saving? (y/n): ";
+                    std::cin >> exitChoice;
+                    if (tolower(exitChoice) == 'y') {
+                        std::cout << "Exiting program without saving.\n";
+                        return;
+                    } else {
+                        choice = 0; // Reset the choice to display the menu again
+                        std::cout << "Continuing the program.\n";
+                    }
+                } else {
+                    std::cout << "Exiting program.\n";
+                }
                 break;
             default:
                 std::cout << "Invalid choice. Please enter a number between 1 and 6.\n";
         }
     } while (choice != 8 && choice != 9);
+}
+
+
+
+
+// Utility functions for entering task details
+
+// Utility function to enter task title
+string TaskManager::enterTaskTitle() const {
+    std::cout << "Enter task title: ";
+    std::string title;
+    std::cin.ignore();
+    std::getline(std::cin, title);
+    return title;
+}
+
+// Utility function to enter task description
+string TaskManager::enterTaskDescription() const {
+    std::cout << "Enter task description: ";
+    std::string description;
+    std::getline(std::cin, description);
+    return description;
+}
+
+// Utility function to enter task deadline
+string TaskManager::enterTaskDeadline() const {
+    std::cout << "Enter task deadline: ";
+    std::string deadline;
+    std::getline(std::cin, deadline);
+    return deadline;
+}
+
+// Utility function to enter task priority
+int TaskManager::enterTaskPriority() const {
+    int priority;
+    do {
+        std::cout << "Enter task priority (1-5): ";
+        std::cin >> priority;
+    } while (priority < 1 || priority > 5);
+    return priority;
 }

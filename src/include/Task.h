@@ -58,6 +58,13 @@ public:
 private:
     std::vector<Task> tasks;
     std::string task_filename;
+    bool unsavedChanges;
+
+    // Utility functions for entering task details
+    string enterTaskTitle() const;
+    string enterTaskDescription() const;
+    string enterTaskDeadline() const;
+    int enterTaskPriority() const;
 };
 
 #endif // TASK_H
