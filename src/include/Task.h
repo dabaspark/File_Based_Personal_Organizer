@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>  // for date and time operations
+#include <cctype>  //for task keywork search // for character classification functions
 
 using namespace std;
 
@@ -41,6 +42,9 @@ public:
 
     // Function to mark a task as completed
     void markTaskCompleted();
+
+    // Function to search for a task
+    void searchTasksByKeyword() const;
 
     // Function to save tasks to a file
     void saveTasksToFile() const;

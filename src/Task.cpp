@@ -120,6 +120,57 @@ void TaskManager::markTaskCompleted() {
     }
 }
 
+// Function to search tasks by keywords
+void TaskManager::searchTasksByKeyword() const {
+    string keyword;
+    cout << "Enter the keyword you want to search for: ";
+    cin.ignore(); // Ignore the newline character left in the buffer
+    getline(cin, keyword);
+
+    // Remove leading and trailing spaces from the user-entered keyword
+    auto keywordBegin = std::find_if(keyword.begin(), keyword.end(), [](char c) {
+        return !std::isspace(c);
+    });
+
+    auto keywordEnd = std::find_if(keyword.rbegin(), keyword.rend(), [](char c) {
+        return !std::isspace(c);
+    }).base();
+
+    keyword = std::string(keywordBegin, keywordEnd);
+
+    cout << "Tasks:\n";
+
+    for (const Task& task : tasks) {
+        // Remove leading and trailing spaces from the task title
+        auto titleBegin = std::find_if(task.title.begin(), task.title.end(), [](char c) {
+            return !std::isspace(c);
+        });
+
+        auto titleEnd = std::find_if(task.title.rbegin(), task.title.rend(), [](char c) {
+            return !std::isspace(c);
+        }).base();
+
+        string trimmedTitle = std::string(titleBegin, titleEnd);
+
+        // Compare with the user-entered keyword (ignoring case)
+        if (std::search(trimmedTitle.begin(), trimmedTitle.end(), keyword.begin(), keyword.end(),
+            [](char c1, char c2) { return std::toupper(c1) == std::toupper(c2); }) != trimmedTitle.end() ||
+            std::search(task.description.begin(), task.description.end(), keyword.begin(), keyword.end(),
+            [](char c1, char c2) { return std::toupper(c1) == std::toupper(c2); }) != task.description.end()) {
+            // Display the task details
+            cout << "Title: " << task.title << "\n";
+            cout << "Description: " << task.description << "\n";
+            cout << "Deadline: " << task.deadline << "\n";
+            cout << "Priority: " << task.priority << "\n";
+            cout << "Status: " << (task.completed ? "Completed" : "Incomplete") << "\n";
+            cout << "Creation Date: " << task.creationDate << "\n";
+            cout << "-----------------\n";
+        }
+    }
+}
+
+
+
 void TaskManager::saveTasksToFile() const {
     ofstream file(task_filename);
 
@@ -169,8 +220,10 @@ void TaskManager::runWindow() {
         std::cout << "3. Edit Task\n";
         std::cout << "4. Delete Task\n";
         std::cout << "5. Mark Task as Completed\n";
-        std::cout << "6. Save and Quit\n";
-        std::cout << "Enter your choice (1-6): ";
+        std::cout << "6. Search Tasks by Keyword\n";
+        std::cout << "7. Save and Quit\n";
+        std::cout << "8. Quit without Saving\n";
+        std::cout << "Enter your choice (1-7): ";
         std::cin >> choice;
 
         switch (choice) {
@@ -190,11 +243,17 @@ void TaskManager::runWindow() {
                 markTaskCompleted();
                 break;
             case 6:
+                searchTasksByKeyword();
+                break;
+            case 7:
                 saveTasksToFile();
                 std::cout << "Tasks saved. Exiting program.\n";
+                break;
+            case 8:
+                std::cout << "Exiting program.\n";
                 break;
             default:
                 std::cout << "Invalid choice. Please enter a number between 1 and 6.\n";
         }
-    } while (choice != 6);
+    } while (choice != 8 && choice != 7);
 }
