@@ -1,10 +1,13 @@
-// main.cpp
 #include "include/Task.h"
-#include <iostream>
+
 
 int main() {
-    TaskManager taskManager;
-    taskManager.runMenu();
+    vector<Task> tasks;
+    const string filename = "tasks.txt";
+
+    loadTasksFromFile(tasks, filename);
+
+    task_runwindow(tasks, filename);
 
     return 0;
 }

@@ -1,45 +1,44 @@
 // Task.h
 #ifndef TASK_H
 #define TASK_H
-
-#include <string>
-#include <ctime>
+#include <iostream>
 #include <fstream>
-#include <sstream>
+#include <vector>
+#include <algorithm>
 
-struct TaskNode {
-    std::string title;
-    std::string description;
-    std::string deadline;
+using namespace std;
+
+// Define the structure for a task
+struct Task {
+    string title;
+    string description;
+    string deadline;
     int priority;
     bool completed;
-    time_t creationDate;
-
-    TaskNode* next;
 };
 
-class TaskManager {
-public:
-    TaskManager();
-    ~TaskManager();
+// Function to add a new task
+void addTask(vector<Task>& tasks);
 
-    void runMenu();
+// Function to display all tasks
+void displayTasks(const vector<Task>& tasks);
 
-private:
-    TaskNode* head;
+// Function to edit a task
+void editTask(vector<Task>& tasks);
 
-    void addTask(const std::string& title, const std::string& description, const std::string& deadline, int priority);
-    void listTasks();
-    void deleteTask(const std::string& title);
-    void editTask(const std::string& title);
-    void markTaskCompleted(const std::string& title);
-    void searchTasks(const std::string& keyword);
-    void saveToFile();
-    void loadFromFile();
+// Function to delete a task
+void deleteTask(vector<Task>& tasks);
 
-    TaskNode* createTaskNode(const std::string& title, const std::string& description, const std::string& deadline, int priority);
-    void insertTaskNode(TaskNode* newNode);
-    void deleteTaskNode(TaskNode* nodeToDelete);
-};
+// Function to mark a task as completed
+void markTaskCompleted(vector<Task>& tasks);
+
+// Function to load tasks from a file
+void loadTasksFromFile(vector<Task>& tasks, const string& filename);
+
+// Function to save tasks to a file
+void saveTasksToFile(const vector<Task>& tasks, const string& filename);
+
+// Function to show the task menu
+void task_runwindow(vector<Task>& tasks, const string& filename);
 
 #endif // TASK_H
