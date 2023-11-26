@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <chrono>  // for date and time operations
 
 using namespace std;
 
@@ -13,6 +14,7 @@ struct Task {
     string title;       // Title of the task
     string description; // Description of the task
     string deadline;    // Deadline of the task
+    string creationDate; // Creation date of the task
     int priority;       // Priority of the task
     bool completed;     // Status of the task
 };

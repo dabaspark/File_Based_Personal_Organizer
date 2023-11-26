@@ -17,6 +17,7 @@ void TaskManager::addTask() {
     Task newTask;
 
     std::cout << "Enter task title: ";
+    std::cin.ignore(); // Clear the newline character from the buffer
     std::getline(std::cin, newTask.title);
 
     std::cout << "Enter task description: ";
@@ -29,6 +30,11 @@ void TaskManager::addTask() {
     std::cin >> newTask.priority;
 
     newTask.completed = false;
+
+    // Get the current date
+    auto now = chrono::system_clock::to_time_t(chrono::system_clock::now());
+    newTask.creationDate = ctime(&now); // Convert to string
+    newTask.creationDate.pop_back();
 
     tasks.push_back(newTask);
 
@@ -44,6 +50,7 @@ void TaskManager::displayTasks() const {
         std::cout << "Deadline: " << task.deadline << "\n";
         std::cout << "Priority: " << task.priority << "\n";
         std::cout << "Status: " << (task.completed ? "Completed" : "Incomplete") << "\n";
+        std::cout << "Creation Date: " << task.creationDate << "\n";
         std::cout << "-----------------\n";
     }
 }
@@ -122,6 +129,7 @@ void TaskManager::saveTasksToFile() const {
         file << task.deadline << "\n";
         file << task.priority << "\n";
         file << task.completed << "\n";
+        file << task.creationDate<< "\n";
     }
 
     file.close();
@@ -142,6 +150,8 @@ void TaskManager::loadTasksFromFile() {
         file >> task.priority;
         file >> task.completed;
         file.ignore(); // Ignore the newline character left in the buffer
+
+        getline(file, task.creationDate);
 
         tasks.push_back(task);
     }
