@@ -2,11 +2,10 @@
 
 
 int main() {
-    vector<Task> tasks;
     const string task_filename = "storage/tasks.txt";
 
-    loadTasksFromFile(tasks, task_filename);
-    task_runwindow(tasks, task_filename);
+    TaskManager taskManager(task_filename);
+    taskManager.runWindow();
 
     return 0;
 }

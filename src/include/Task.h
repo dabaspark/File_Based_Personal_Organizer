@@ -1,4 +1,4 @@
-// Task.h
+/// Task.h
 #ifndef TASK_H
 #define TASK_H
 #include <iostream>
@@ -17,28 +17,41 @@ struct Task {
     bool completed;     // Status of the task
 };
 
-// Function to add a new task
-void addTask(vector<Task>& tasks);
+class TaskManager {
+public:
+    // Constructor
+    TaskManager(const std::string& filename);
 
-// Function to display all tasks
-void displayTasks(const vector<Task>& tasks);
+    // Destructor
+    ~TaskManager();
 
-// Function to edit a task
-void editTask(vector<Task>& tasks);
+    // Function to add a new task
+    void addTask();
 
-// Function to delete a task
-void deleteTask(vector<Task>& tasks);
+    // Function to display all tasks
+    void displayTasks() const;
 
-// Function to mark a task as completed
-void markTaskCompleted(vector<Task>& tasks);
+    // Function to edit a task
+    void editTask();
 
-// Function to load tasks from a file
-void loadTasksFromFile(vector<Task>& tasks, const string& filename);
+    // Function to delete a task
+    void deleteTask();
 
-// Function to save tasks to a file
-void saveTasksToFile(const vector<Task>& tasks, const string& filename);
+    // Function to mark a task as completed
+    void markTaskCompleted();
 
-// Function to show the task menu
-void task_runwindow(vector<Task>& tasks, const string& filename);
+    // Function to save tasks to a file
+    void saveTasksToFile() const;
+
+    // Function to load tasks from a file
+    void loadTasksFromFile() ;
+
+    // Function to run the task management window
+    void runWindow();
+
+private:
+    std::vector<Task> tasks;
+    std::string task_filename;
+};
 
 #endif // TASK_H

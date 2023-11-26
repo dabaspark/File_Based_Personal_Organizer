@@ -2,45 +2,53 @@
 
 #include "include/Task.h"
 
-// Function to add a new task
-void addTask(vector<Task>& tasks) {
-    Task newTask;   // Create a new empty-valued task
-    
-    cout << "Enter task title: ";   
-    getline(cin, newTask.title);
-    
-    cout << "Enter task description: ";
-    getline(cin, newTask.description);
-    
-    cout << "Enter task deadline: ";
-    getline(cin, newTask.deadline);
-    
-    cout << "Enter task priority (1-5): ";
-    cin >> newTask.priority;
-    
-    newTask.completed = false;
-    
-    tasks.push_back(newTask);
-    
-    cout << "Task added successfully!\n";
+
+// Constructor
+TaskManager::TaskManager(const std::string& filename) : task_filename(filename) {
+    loadTasksFromFile();
 }
 
-// Function to display all tasks
-void displayTasks(const vector<Task>& tasks) {
-    cout << "Tasks:\n";
-    
+// Destructor
+TaskManager::~TaskManager() {
+    saveTasksToFile();
+}
+
+void TaskManager::addTask() {
+    Task newTask;
+
+    std::cout << "Enter task title: ";
+    std::getline(std::cin, newTask.title);
+
+    std::cout << "Enter task description: ";
+    std::getline(std::cin, newTask.description);
+
+    std::cout << "Enter task deadline: ";
+    std::getline(std::cin, newTask.deadline);
+
+    std::cout << "Enter task priority (1-5): ";
+    std::cin >> newTask.priority;
+
+    newTask.completed = false;
+
+    tasks.push_back(newTask);
+
+    std::cout << "Task added successfully!\n";
+}
+
+void TaskManager::displayTasks() const {
+    std::cout << "Tasks:\n";
+
     for (const Task& task : tasks) {
-        cout << "Title: " << task.title << "\n";
-        cout << "Description: " << task.description << "\n";
-        cout << "Deadline: " << task.deadline << "\n";
-        cout << "Priority: " << task.priority << "\n";
-        cout << "Status: " << (task.completed ? "Completed" : "Incomplete") << "\n";
-        cout << "-----------------\n";
+        std::cout << "Title: " << task.title << "\n";
+        std::cout << "Description: " << task.description << "\n";
+        std::cout << "Deadline: " << task.deadline << "\n";
+        std::cout << "Priority: " << task.priority << "\n";
+        std::cout << "Status: " << (task.completed ? "Completed" : "Incomplete") << "\n";
+        std::cout << "-----------------\n";
     }
 }
 
-// Function to edit a task
-void editTask(vector<Task>& tasks) {
+void TaskManager::editTask() {
     string searchTitle;
     cout << "Enter the title of the task you want to edit: ";
     cin.ignore(); // Ignore the newline character left in the buffer
@@ -69,8 +77,7 @@ void editTask(vector<Task>& tasks) {
     }
 }
 
-// Function to delete a task
-void deleteTask(vector<Task>& tasks) {
+void TaskManager::deleteTask() {
     string searchTitle;
     cout << "Enter the title of the task you want to delete: ";
     cin.ignore(); // Ignore the newline character left in the buffer
@@ -88,8 +95,7 @@ void deleteTask(vector<Task>& tasks) {
     }
 }
 
-// Function to mark a task as completed
-void markTaskCompleted(vector<Task>& tasks) {
+void TaskManager::markTaskCompleted() {
     string searchTitle;
     cout << "Enter the title of the task you want to mark as completed: ";
     cin.ignore(); // Ignore the newline character left in the buffer
@@ -107,9 +113,8 @@ void markTaskCompleted(vector<Task>& tasks) {
     }
 }
 
-// Function to save tasks to a file
-void saveTasksToFile(const vector<Task>& tasks, const string& filename) {
-    ofstream file(filename);
+void TaskManager::saveTasksToFile() const {
+    ofstream file(task_filename);
 
     for (const Task& task : tasks) {
         file << task.title << "\n";
@@ -122,9 +127,8 @@ void saveTasksToFile(const vector<Task>& tasks, const string& filename) {
     file.close();
 }
 
-// Function to load tasks from a file
-void loadTasksFromFile(vector<Task>& tasks, const string& filename) {
-    ifstream file(filename);
+void TaskManager::loadTasksFromFile() {
+    ifstream file(task_filename);
 
     if (!file) {
         cout << "File not found. Starting with an empty task list.\n";
@@ -145,42 +149,42 @@ void loadTasksFromFile(vector<Task>& tasks, const string& filename) {
     file.close();
 }
 
-void task_runwindow(vector<Task>& tasks, const string& filename) {
+void TaskManager::runWindow() {
     int choice;
 
     do {
-        cout << "Menu:\n";
-        cout << "1. Add Task\n";
-        cout << "2. Display Tasks\n";
-        cout << "3. Edit Task\n";
-        cout << "4. Delete Task\n";
-        cout << "5. Mark Task as Completed\n";
-        cout << "6. Save and Quit\n";
-        cout << "Enter your choice (1-6): ";
-        cin >> choice;
+        std::cout << "Menu:\n";
+        std::cout << "1. Add Task\n";
+        std::cout << "2. Display Tasks\n";
+        std::cout << "3. Edit Task\n";
+        std::cout << "4. Delete Task\n";
+        std::cout << "5. Mark Task as Completed\n";
+        std::cout << "6. Save and Quit\n";
+        std::cout << "Enter your choice (1-6): ";
+        std::cin >> choice;
 
         switch (choice) {
             case 1:
-                addTask(tasks);
+                addTask();
                 break;
             case 2:
-                displayTasks(tasks);
+                displayTasks();
                 break;
             case 3:
-                editTask(tasks);
+                editTask();
                 break;
             case 4:
-                deleteTask(tasks);
+                deleteTask();
                 break;
             case 5:
-                markTaskCompleted(tasks);
+                markTaskCompleted();
                 break;
             case 6:
-                saveTasksToFile(tasks, filename);
-                cout << "Tasks saved. Exiting program.\n";
+                saveTasksToFile();
+                std::cout << "Tasks saved. Exiting program.\n";
                 break;
             default:
-                cout << "Invalid choice. Please enter a number between 1 and 6.\n";
+                std::cout << "Invalid choice. Please enter a number between 1 and 6.\n";
         }
     } while (choice != 6);
 }
