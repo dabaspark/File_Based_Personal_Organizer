@@ -58,6 +58,9 @@ public:
     // Function to run the task management window
     void runWindow();
 
+    // Function to sort tasks
+    void listAndSortTasks();
+
 private:
     std::vector<Task> tasks;
     std::string task_filename;

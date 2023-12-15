@@ -54,6 +54,78 @@ void TaskManager::displayTasks() const {
     }
 }
 
+void TaskManager::listAndSortTasks() {
+    int sortOption;
+
+    // Display sorting options
+    std::cout << "Sort tasks by:\n";
+    std::cout << "1. Title\n";
+    std::cout << "2. Deadline\n";
+    std::cout << "3. Creation Date\n";
+    std::cout << "4. Priority\n";
+    std::cout << "Enter your choice (1-4): ";
+
+    std::cin >> sortOption;
+
+    // Validate user input
+    while (sortOption < 1 || sortOption > 4) {
+        std::cout << "Invalid choice. Please enter a number between 1 and 4.\n";
+        std::cin >> sortOption;
+    }
+
+    // Make a copy of the original tasks vector
+    std::vector<Task> originalTasks = tasks;
+
+    // Perform sorting based on user choice
+    switch (sortOption) {
+        case 1:
+            std::sort(tasks.begin(), tasks.end(), [](const Task& a, const Task& b) {
+                // Perform case-insensitive comparison
+                return std::lexicographical_compare(
+                    a.title.begin(), a.title.end(),
+                    b.title.begin(), b.title.end(),
+                    [](char c1, char c2) { return std::tolower(c1) < std::tolower(c2); }
+                );
+            });
+            break;
+        case 2:
+            std::sort(tasks.begin(), tasks.end(), [](const Task& a, const Task& b) {
+                return a.deadline < b.deadline;
+            });
+            break;
+        case 3:
+            std::sort(tasks.begin(), tasks.end(), [](const Task& a, const Task& b) {
+                return a.creationDate < b.creationDate;
+            });
+            break;
+        case 4:
+            std::sort(tasks.begin(), tasks.end(), [](const Task& a, const Task& b) {
+                return a.priority < b.priority;
+            });
+            break;
+    }
+
+    // Display the sorted tasks
+    displayTasks();
+
+    // Ask the user for confirmation
+    char choice;
+    std::cout << "Are you sure you want to change the order of the tasks? (y/n): ";
+    std::cin >> choice;
+    if (tolower(choice) != 'y' && tolower(choice) != 'Y') {
+        // Revert to the original order
+        tasks = originalTasks;
+        std::cout << "Order is not changed.\n";
+        return;
+    }
+
+    std::cout << "Task order changed!\n";
+    unsavedChanges = true;
+}
+
+
+
+
 void TaskManager::editTask() {
     string searchTitle;
     cout << "Enter the title of the task you want to edit: ";
@@ -260,13 +332,13 @@ void TaskManager::runWindow() {
         std::cout << "4. Delete Task\n";
         std::cout << "5. Mark Task as Completed\n";
         std::cout << "6. Search Tasks by Keyword\n";
-        std::cout << "7. Save Current Changes to File\n";
-        std::cout << "8. Save and Quit\n";
-        std::cout << "9. Quit without Saving\n";
-
+        std::cout << "7. Sort Tasks\n";
+        std::cout << "8. Save Current Changes to File\n";
+        std::cout << "9. Save and Quit\n";
+        std::cout << "10. Quit without Saving\n";
         
 
-        std::cout << "Enter your choice (1-9): ";
+        std::cout << "Enter your choice (1-10): ";
         std::cin >> choice;
 
         switch (choice) {
@@ -289,15 +361,18 @@ void TaskManager::runWindow() {
                 searchTasksByKeyword();
                 break;
             case 7:
+                listAndSortTasks();
+                break;
+            case 8:
                 saveTasksToFile();
                 std::cout << "Tasks saved. \n";
                 unsavedChanges = false;
                 break;
-            case 8:
+            case 9:
                 saveTasksToFile();
                 std::cout << "Tasks saved. Exiting program.\n";
                 break;
-            case 9:
+            case 10:
                 if (unsavedChanges) {
                     char exitChoice;
                     std::cout << "Are you sure you want to exit without saving? (y/n): ";
@@ -316,7 +391,7 @@ void TaskManager::runWindow() {
             default:
                 std::cout << "Invalid choice. Please enter a number between 1 and 6.\n";
         }
-    } while (choice != 8 && choice != 9);
+    } while (choice != 9 && choice != 10);
 }
 
 
