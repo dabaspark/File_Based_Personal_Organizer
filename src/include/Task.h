@@ -10,6 +10,8 @@
 #include <sstream> // for string stream operations
 #include <ctime>    // for time operations
 #include <iomanip>  // for date and time formatting
+#include <limits>  // for limiting user input in display menu (error handling)
+
 
 using namespace std;
 
@@ -76,6 +78,11 @@ private:
     bool isValidDateFormat(const std::string& date) const;
     bool isPastDeadline(const std::string& deadline) const;
     bool isValidDate(int year, int month, int day) const;
+
+
+    // Utility function for runWindow function
+    int getValidChoice(int min, int max);
+
 
 };
 

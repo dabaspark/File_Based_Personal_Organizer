@@ -63,15 +63,10 @@ void TaskManager::listAndSortTasks() {
     std::cout << "2. Deadline\n";
     std::cout << "3. Creation Date\n";
     std::cout << "4. Priority\n";
-    std::cout << "Enter your choice (1-4): ";
+    //std::cout << "Enter your choice (1-4): ";
 
-    std::cin >> sortOption;
-
-    // Validate user input
-    while (sortOption < 1 || sortOption > 4) {
-        std::cout << "Invalid choice. Please enter a number between 1 and 4.\n";
-        std::cin >> sortOption;
-    }
+    // get the user input
+    sortOption = getValidChoice(1, 4);
 
     // Make a copy of the original tasks vector
     std::vector<Task> originalTasks = tasks;
@@ -139,10 +134,47 @@ void TaskManager::editTask() {
     if (it != tasks.end()) {
         Task editedTask = *it;  // Create a copy of the original task
 
-        editedTask.title = enterTaskTitle();
-        editedTask.description = enterTaskDescription();
-        editedTask.deadline = enterTaskDeadline();
-        editedTask.priority = enterTaskPriority();
+        // Display editing options
+        cout << "Edit task:\n";
+        cout << "1. Title\n";
+        cout << "2. Description\n";
+        cout << "3. Deadline\n";
+        cout << "4. Priority\n";
+        cout << "5. All\n";
+        cout << "Enter your choice (1-5): ";
+
+        int editOption;
+        cin >> editOption;
+
+        // Validate user input
+        while (editOption < 1 || editOption > 5) {
+            cout << "Invalid choice. Please enter a number between 1 and 5.\n";
+            cin >> editOption;
+        }
+        cin.ignore(); // Ignore the newline character left in the buffer
+
+        // Perform editing based on user choice
+        switch (editOption) {
+            case 1:
+                editedTask.title = enterTaskTitle();
+                break;
+            case 2:
+                editedTask.description = enterTaskDescription();
+                break;
+            case 3:
+                editedTask.deadline = enterTaskDeadline();
+                break;
+            case 4:
+                editedTask.priority = enterTaskPriority();
+                break;
+            case 5:
+                // If the user chooses to edit all fields, update all fields
+                editedTask.title = enterTaskTitle();
+                editedTask.description = enterTaskDescription();
+                editedTask.deadline = enterTaskDeadline();
+                editedTask.priority = enterTaskPriority();
+                break;
+        }
 
         // Ask the user if they want to save changes
         char saveChoice;
@@ -150,13 +182,13 @@ void TaskManager::editTask() {
         cin >> saveChoice;
 
         if (tolower(saveChoice) == 'y') {
-            // If user chooses to save, update the original task
+            // If the user chooses to save, update the original task
             *it = editedTask;
             //saveTasksToFile();  // Save changes immediately
             cout << "Changes saved!\n";
             unsavedChanges = true;
         } else {
-            // If user chooses not to save, discard the changes
+            // If the user chooses not to save, discard the changes
             cout << "Changes discarded.\n";
         }
     } else {
@@ -165,10 +197,13 @@ void TaskManager::editTask() {
 }
 
 
+
 void TaskManager::deleteTask() {
     string searchTitle;
     cout << "Enter the title of the task you want to delete: ";
+
     cin.ignore(); // Ignore the newline character left in the buffer
+    
     getline(cin, searchTitle);
 
     auto it = find_if(tasks.begin(), tasks.end(), [&searchTitle](const Task& task) {
@@ -215,13 +250,18 @@ void TaskManager::markTaskCompleted() {
     });
 
     if (it != tasks.end()) {
-        it->completed = true;
-        cout << "Task marked as completed!\n";
-        unsavedChanges = true;
+        if (it->completed) {
+            cout << "Task is already marked as completed.\n";
+        } else {
+            it->completed = true;
+            cout << "Task marked as completed!\n";
+            unsavedChanges = true;
+        }
     } else {
         cout << "Task not found.\n";
     }
 }
+
 
 // Function to search tasks by keywords
 void TaskManager::searchTasksByKeyword() const {
@@ -338,8 +378,8 @@ void TaskManager::runWindow() {
         std::cout << "10. Quit without Saving\n";
         
 
-        std::cout << "Enter your choice (1-10): ";
-        std::cin >> choice;
+        //std::cout << "Enter your choice (1-10): ";
+        choice = getValidChoice(1, 10);
 
         switch (choice) {
             case 1:
@@ -389,13 +429,33 @@ void TaskManager::runWindow() {
                 }
                 break;
             default:
-                std::cout << "Invalid choice. Please enter a number between 1 and 6.\n";
+                std::cout << "Invalid choice. Please enter a number between 1 and 10.\n";
         }
     } while (choice != 9 && choice != 10);
 }
 
+// Function to validate and get user input as an integer within a specified range
+int TaskManager::getValidChoice(int min, int max) {
+    int choice;
+    std::string input;
 
+    // Input validation loop
+    while (true) {
+        std::cout << "Enter your choice ("<< min <<"-"<< max <<"): ";
+        std::getline(std::cin, input);
 
+        std::stringstream ss(input);
+
+        if (ss >> choice && ss.eof() && choice >= min && choice <= max) {
+            // Successful conversion to integer and within the valid range
+            break;
+        }
+
+        std::cout << "Invalid choice. Please enter a whole number between " << min << " and " << max << ".\n";
+    }
+
+    return choice;
+}
 
 // Utility functions for entering task details
 
