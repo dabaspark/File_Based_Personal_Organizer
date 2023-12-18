@@ -11,7 +11,8 @@
 #include <ctime>    // for time operations
 #include <iomanip>  // for date and time formatting
 #include <limits>  // for limiting user input in display menu (error handling)
-
+#include <thread> // for std::this_thread::sleep_for
+#include <chrono> // for std::chrono::seconds
 
 using namespace std;
 
@@ -37,7 +38,7 @@ public:
     void addTask();
 
     // Function to display all tasks
-    void displayTasks() const;
+    void displayTasks();
 
     // Function to edit a task
     void editTask();
@@ -67,6 +68,7 @@ private:
     std::vector<Task> tasks;
     std::string task_filename;
     bool unsavedChanges;
+    int waiting_time;
 
     // Utility functions for entering task details
     string enterTaskTitle() const;

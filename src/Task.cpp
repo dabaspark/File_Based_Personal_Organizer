@@ -7,6 +7,7 @@
 TaskManager::TaskManager(const std::string& filename) : task_filename(filename) {
     loadTasksFromFile();
     unsavedChanges = false;
+    waiting_time = 3; // seconds
 }
 
 // Destructor
@@ -15,6 +16,16 @@ TaskManager::~TaskManager() {
 }
 
 void TaskManager::addTask() {
+    // Clear the console
+    std::system("clear");
+    // Display information about the add task process
+    std::cout << "Add Task:\n";
+    std::cout << "Please enter the details for the new task.\n";
+    std::cout << "You will be prompted for the title, description, deadline, and priority.\n";
+    std::cout << "You can choose to mark the task as completed later.\n";
+    std::cout << "Press Ctrl+C at any time to cancel.\n\n";
+
+
     Task newTask;
 
     newTask.title = enterTaskTitle();
@@ -39,20 +50,50 @@ void TaskManager::addTask() {
     tasks.push_back(newTask);
     unsavedChanges = true;
     std::cout << "Task added successfully!\n";
+
+    std::cout << "You will re-directed to main Menu after "<< waiting_time << " seconds...\n";
+    // Pause for 3 seconds before returning to the main menu
+    std::this_thread::sleep_for(std::chrono::seconds(waiting_time));
+    // Clear the console
+    std::system("clear");
 }
 
-void TaskManager::displayTasks() const {
-    std::cout << "Tasks:\n";
+void TaskManager::displayTasks(){
+    // Clear the console
+    std::system("clear");
+    // ask the user to show it in Table format or normal format
+    int choice;
+    std::cout << "Display Tasks:\n";
+    std::cout << "1. Detailed Format\n";
+    std::cout << "2. Table Format\n";
+    choice = getValidChoice(1, 2);
 
-    for (const Task& task : tasks) {
-        std::cout << "Title: " << task.title << "\n";
-        std::cout << "Description: " << task.description << "\n";
-        std::cout << "Deadline: " << task.deadline << "\n";
-        std::cout << "Priority: " << task.priority << "\n";
-        std::cout << "Status: " << (task.completed ? "Completed" : "Incomplete") << "\n";
-        std::cout << "Creation Date: " << task.creationDate << "\n";
-        std::cout << "-----------------\n";
+    // Clear the console
+    std::system("clear");
+    std::cout << "The tasks are:\n";
+    std::cout << "-----------------------------------------------\n";
+    if (choice == 2) {
+        // Display tasks in detailed format
+        displayTasksDetailed(tasks);
+    } else { 
+        std::cout << "Tasks:\n";
+
+        for (const Task& task : tasks) {
+            std::cout << "Title: " << task.title << "\n";
+            std::cout << "Description: " << task.description << "\n";
+            std::cout << "Deadline: " << task.deadline << "\n";
+            std::cout << "Priority: " << task.priority << "\n";
+            std::cout << "Status: " << (task.completed ? "Completed" : "Incomplete") << "\n";
+            std::cout << "Creation Date: " << task.creationDate << "\n";
+            std::cout << "-----------------\n";
+        }
     }
+
+    // press any key to exit
+    std::cout << "Press any key to exit...\n";
+    std::cin.get();
+    // Clear the console
+    std::system("clear");
 }
 
 void TaskManager::listAndSortTasks() {
@@ -373,7 +414,8 @@ void TaskManager::loadTasksFromFile() {
 
 void TaskManager::runWindow() {
     int choice;
-
+    // Clear the console
+    std::system("clear");
     do {
         std::cout << "Number of tasks: " << tasks.size() <<", "
             << "Completed tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
