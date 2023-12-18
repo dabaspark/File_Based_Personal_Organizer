@@ -80,8 +80,6 @@ void TaskManager::displayTasks(){
     std::cout << "2. Table Format\n";
     choice = getValidChoice(1, 2);
 
-    // Clear the console
-    std::system("clear");
     std::cout << "The tasks are:\n";
     std::cout << "-----------------------------------------------\n";
     if (choice == 2) {
@@ -526,18 +524,16 @@ void TaskManager::runWindow() {
     do {
         // Clear the console
         std::system("clear");
-
         // Display the menu
         std::cout << "====================\n";
         std::cout << "Main Menu\n";
         std::cout << "====================\n";
-
         std::cout << "Number of tasks: " << tasks.size() <<", "
             << "Completed tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
                 return task.completed;
             }) << ", " << "Incomplete tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
                 return !task.completed;
-            })<< ", " << "File Status: " << (unsavedChanges ? "New changes not saved to the file" : "Up to Date") << "\n";
+            })<< ", " << "File Status: " << (unsavedChanges ? "\033[1;31mNew changes not saved to the file!\033[0m" : "Up to Date") << "\n";
 
         std::cout << "====================\n";
         std::cout << "Menu:\n";
