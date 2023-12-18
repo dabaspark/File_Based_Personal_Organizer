@@ -7,7 +7,6 @@
 TaskManager::TaskManager(const std::string& filename) : task_filename(filename) {
     loadTasksFromFile();
     unsavedChanges = false;
-    waiting_time = 3; // seconds
 }
 
 // Destructor
@@ -18,13 +17,8 @@ TaskManager::~TaskManager() {
 }
 
 void TaskManager::addTask() {
-    // Clear the console
-    std::system("clear");
-
-    // Display the Heading of the menu
-    std::cout << "====================\n";
-    std::cout << "Main Menu >> Add Task:\n";
-    std::cout << "====================\n";
+    
+    print_menu_header("Main Menu >> Tasks Menu >> Add a Task", true);
 
     // Display information about the add task process
     std::cout << "Add Task:\n";
@@ -58,29 +52,20 @@ void TaskManager::addTask() {
     unsavedChanges = true;
     std::cout << "Task added successfully!\n";
 
-    // press any key to exit
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
+    print_menu_tail("Tasks Menu", true);
 }
 
 void TaskManager::displayTasks(){
-    // Clear the console
-    std::system("clear");
 
-    // Display the Heading of the menu
-    std::cout << "====================\n";
-    std::cout << "Main Menu >> Display Tasks:\n";
-    std::cout << "====================\n";
-
+    print_menu_header("Main Menu >> Tasks Menu >> Display Tasks", true);
+    
     // ask the user to show it in Table format or normal format
     int choice;
     std::cout << "1. Detailed Format\n";
     std::cout << "2. Table Format\n";
     choice = getValidChoice(1, 2);
 
-    std::cout << "The tasks are:\n";
+    std::cout << "The Tasks are:\n";
     std::cout << "-----------------------------------------------\n";
     if (choice == 2) {
         // Display tasks in detailed format
@@ -99,23 +84,13 @@ void TaskManager::displayTasks(){
         }
     }
 
-    // press any key to go back to main menu
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
+    print_menu_tail("Tasks Menu", true);
 }
 
 void TaskManager::listAndSortTasks() {
     int sortOption;
 
-    // Clear the console
-    std::system("clear");
-
-    // Display the Heading of the menu
-    std::cout << "====================\n";
-    std::cout << "Main Menu >> List and Sort Tasks:\n";
-    std::cout << "====================\n";
+    print_menu_header("Main Menu >> Tasks Menu >> List and Sort Tasks", true);
 
     // Display sorting options
     std::cout << "Sort tasks by:\n";
@@ -174,35 +149,23 @@ void TaskManager::listAndSortTasks() {
         return;
     }
 
-    std::cout << "Task order changed!\n";
+    std::cout << "Tasks order changed!\n";
     unsavedChanges = true;
 
-    // press any key to go back to main menu
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
+    print_menu_tail("Tasks Menu", true);
 }
-
-
 
 
 void TaskManager::editTask() {
     string searchTitle;
 
-    // Clear the console
-    std::system("clear");
-
-    // Display the Heading of the menu
-    std::cout << "====================\n";
-    std::cout << "Main Menu >> Edit Tasks:\n";
-    std::cout << "====================\n";
+    print_menu_header("Main Menu >> Tasks Menu >> Edit Tasks", true);
 
     // Display information about the edit task process
-    std::cout << "You will be prompted for the title of the task to be changed\n";
+    std::cout << "You will be prompted to enter the title of the task to be changed\n";
     std::cout << "Then, specify which field you want to edit.\n";
     std::cout << "---------------------------------------------\n";
-    std::cout << "The List of The tasks are:\n";
+    std::cout << "The List of the Tasks are:\n";
     std::cout << "---------------------------------------------\n";
     displayTasksDetailed(tasks, false);
 
@@ -215,7 +178,7 @@ void TaskManager::editTask() {
     getline(cin, searchTitle);
     
     // Trim whitespaces from the input title
-    //searchTitle = trim(searchTitle);
+    searchTitle = trim(searchTitle);
 
     // debug
     /*
@@ -235,23 +198,15 @@ void TaskManager::editTask() {
         Task editedTask = *it;  // Create a copy of the original task
 
         // Display editing options
-        cout << "Edit task:\n";
+        cout << "Edit Task:\n";
         cout << "1. Title\n";
         cout << "2. Description\n";
         cout << "3. Deadline\n";
         cout << "4. Priority\n";
         cout << "5. All\n";
-        cout << "Enter your choice (1-5): ";
 
         int editOption;
-        cin >> editOption;
-        cin.ignore(1, '\n');
-        // Validate user input
-        while (editOption < 1 || editOption > 5) {
-            cout << "Invalid choice. Please enter a number between 1 and 5.\n";
-            cin >> editOption;
-            cin.ignore(1, '\n');
-        }
+        editOption = getValidChoice(1, 5);
 
         // Perform editing based on user choice
         switch (editOption) {
@@ -295,29 +250,19 @@ void TaskManager::editTask() {
         cout << "Task not found.\n";
     }
 
-    // press any key to go back to main menu
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
+    print_menu_tail("Tasks Menu", true);
 }
 
 
 
 void TaskManager::deleteTask() {
     string searchTitle;
-    std::system("clear");
-
-    // Display the Heading of the menu
-    std::cout << "====================\n";
-    std::cout << "Main Menu >> Delete Tasks:\n";
-    std::cout << "====================\n";
+    print_menu_header("Main Menu >> Tasks Menu >> Delete Tasks", true);
 
     // Display information about the delete task process
-    std::cout << "You will be prompted for the title of the task to be deleted\n";
-    std::cout << "Then, specify which field you want to edit.\n";
+    std::cout << "You will be prompted to enter the title of the task to be deleted\n";
     std::cout << "---------------------------------------------\n";
-    std::cout << "The List of The tasks are:\n";
+    std::cout << "The List of the Tasks are:\n";
     std::cout << "---------------------------------------------\n";
 
     displayTasksDetailed(tasks, false);
@@ -518,7 +463,7 @@ void TaskManager::loadTasksFromFile() {
     file.close();
 }
 
-void TaskManager::runWindow() {
+void TaskManager::runWindow_Task() {
     int choice;
 
     do {
@@ -606,29 +551,6 @@ void TaskManager::runWindow() {
     } while (choice != 9 && choice != 10);
 }
 
-// Function to validate and get user input as an integer within a specified range
-int TaskManager::getValidChoice(int min, int max) {
-    int choice;
-    std::string input;
-
-    // Input validation loop
-    while (true) {
-        std::cout << "Enter your choice ("<< min <<"-"<< max <<"): ";
-        std::getline(std::cin, input);
-
-        std::stringstream ss(input);
-
-        if (ss >> choice && ss.eof() && choice >= min && choice <= max) {
-            // Successful conversion to integer and within the valid range
-            break;
-        }
-
-        std::cout << "Invalid choice. Please enter a whole number between " << min << " and " << max << ".\n";
-    }
-
-    return choice;
-}
-
 // Utility functions for entering task details
 
 // Utility function to enter task title
@@ -684,10 +606,10 @@ std::string TaskManager::enterTaskDeadline() const {
             std::cout << "Error: Deadline cannot be empty. Please enter a valid deadline (YYYY-MM-DD): ";
         } else if (!isValidDateFormat(deadline)) {
             std::cout << "Error: Invalid date format. Please enter a valid deadline (YYYY-MM-DD): ";
-        } else if (isPastDeadline(deadline)) {
+        } else if (isPast(deadline)) {
             std::cout << "Error: Deadline cannot be in the past. Please enter a future deadline: ";
         }
-    } while (deadline.empty() || !isValidDateFormat(deadline) || isPastDeadline(deadline));
+    } while (deadline.empty() || !isValidDateFormat(deadline) || isPast(deadline));
     return deadline;
 }
 
@@ -746,48 +668,6 @@ int TaskManager::enterTaskPriority() const {
 
     return priority;
 }
-
-// utlitity function to enterTaskDeadline function
-
-// Utility function to check if the date has a valid format (YYYY-MM-DD)
-bool TaskManager::isValidDateFormat(const std::string& date) const {
-    std::tm testDate = {};
-    std::istringstream ss(date);
-
-    // Parse the date components manually
-    ss >> std::get_time(&testDate, "%Y-%m-%d");
-
-    // Check if the entire input string is consumed and date components are valid
-    return !ss.fail() && ss.eof() && isValidDate(testDate.tm_year + 1900, testDate.tm_mon + 1, testDate.tm_mday);
-}
-
-// Utility function to check if the deadline is in the past
-bool TaskManager::isPastDeadline(const std::string& deadline) const {
-    std::tm deadlineDate = {};
-    std::istringstream ss(deadline);
-
-    // Parse the deadline components manually
-    if (ss >> std::get_time(&deadlineDate, "%Y-%m-%d")) {
-        // Check if the extracted date components are valid
-        if (isValidDate(deadlineDate.tm_year + 1900, deadlineDate.tm_mon + 1, deadlineDate.tm_mday)) {
-            // Get the current time
-            auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-
-            // Compare the deadline date with the current date
-            return std::mktime(&deadlineDate) < now;
-        }
-    }
-
-    return false; // Invalid date format, handled separately
-}
-
-    // Check if the date components are valid
-bool TaskManager::isValidDate(int year, int month, int day) const {
-    // Some basic validation
-    return (year >= 1900 && month >= 1 && month <= 12 && day >= 1 && day <= 31);
-}
-
-
 
 // utilitis for edittask
 // Function to trim whitespaces from both ends of a string

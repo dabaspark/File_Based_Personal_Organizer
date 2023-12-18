@@ -14,6 +14,8 @@
 #include <thread> // for std::this_thread::sleep_for
 #include <chrono> // for std::chrono::seconds
 
+#include "Utilities.h"
+
 using namespace std;
 
 // Define the structure for a task
@@ -59,7 +61,7 @@ public:
     void loadTasksFromFile() ;
 
     // Function to run the task management window
-    void runWindow();
+    void runWindow_Task();
 
     // Function to sort tasks
     void listAndSortTasks();
@@ -68,7 +70,6 @@ private:
     std::vector<Task> tasks;
     std::string task_filename;
     bool unsavedChanges;
-    int waiting_time;
 
     // Utility functions for entering task details
     string enterTaskTitle() const;
@@ -80,10 +81,6 @@ private:
     bool isValidDateFormat(const std::string& date) const;
     bool isPastDeadline(const std::string& deadline) const;
     bool isValidDate(int year, int month, int day) const;
-
-
-    // Utility function for runWindow function
-    int getValidChoice(int min, int max);
 
     // Utility function for editTask function
     std::string trim(const std::string& str);

@@ -1,12 +1,12 @@
-#include "include/Task.h"
-
+//#include "include/Task.h"
+#include "include/Organizer.h"
 
 int main() {
-    const string task_filename = "storage/tasks.txt";
+    const std::string taskFilename = "storage/tasks.txt";
+    const std::string appointmentFilename = "storage/appointments.txt";
 
-    TaskManager taskManager(task_filename);
-    //taskManager.editTask();
-    taskManager.runWindow();
+    Organizer organizer(taskFilename, appointmentFilename);
+    organizer.displayMainMenu();
 
     return 0;
 }
