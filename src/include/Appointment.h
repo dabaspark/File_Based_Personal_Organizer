@@ -33,6 +33,9 @@ struct Appointment {
 
 class AppointmentManager {
 public:
+    bool unsavedChanges;
+    std::vector<Appointment> appointments;
+    
     // Constructor
     AppointmentManager(const std::string& filename);
 
@@ -67,9 +70,7 @@ public:
     void listAndSortAppointments();
 
 private:
-    std::vector<Appointment> appointments;
     std::string appointment_filename;
-    bool unsavedChanges;
 
     // Utility functions for entering Appointment details
     string enterAppointmentTitle() const;

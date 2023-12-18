@@ -78,6 +78,16 @@ void print_menu_header(const std::string& header, bool clear_screen){
     std::cout << "====================\n";
 }
 
+void print_menu_tail(const std::string& go_back_to, bool clear_screen){
+    // press any key to go back to main menu
+    std::cout << "------------------------------------------------\n";
+    std::cout << "Press any key to go back to " << go_back_to << ": ";
+    std::cin.get();
+
+    if (clear_screen){
+        std::system("clear");
+    }
+}
 
 
 bool isValidTimeFormat(const std::string& time) {

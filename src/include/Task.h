@@ -30,6 +30,9 @@ struct Task {
 
 class TaskManager {
 public:
+    bool unsavedChanges;
+    std::vector<Task> tasks;
+
     // Constructor
     TaskManager(const std::string& filename);
 
@@ -67,20 +70,13 @@ public:
     void listAndSortTasks();
 
 private:
-    std::vector<Task> tasks;
     std::string task_filename;
-    bool unsavedChanges;
 
     // Utility functions for entering task details
     string enterTaskTitle() const;
     string enterTaskDescription() const;
     string enterTaskDeadline() const;
     int enterTaskPriority() const;
-
-    // Utility function for enterTaskDeadline function
-    bool isValidDateFormat(const std::string& date) const;
-    bool isPastDeadline(const std::string& deadline) const;
-    bool isValidDate(int year, int month, int day) const;
 
     // utilitis for listAndSortTasks
     void displayTasksDetailed(const std::vector<Task>& tasks, bool clearScreen);

@@ -385,7 +385,6 @@ void AppointmentManager::runWindow_Appointment() {
             << "File Status: " << (unsavedChanges ? "\033[1;31mNew Changes Not Saved to the File!\033[0m" : "Up to Date") << "\n";
 
         std::cout << "====================\n";
-        std::cout << "Menu:\n";
         std::cout << "1. Add Appointment\n";
         std::cout << "2. Display Appointments\n";
         std::cout << "3. Edit an Appointment\n";
@@ -427,7 +426,7 @@ void AppointmentManager::runWindow_Appointment() {
                 std::cout << "Going to the Main Menu.\n";
                 break;
             default:
-                std::cout << "Invalid choice. Please enter a number between 1 and 10.\n";
+                std::cout << "Invalid choice. Please enter a number between 1 and 8.\n";
         }
     } while (choice != 8);
 }
@@ -471,7 +470,7 @@ string AppointmentManager::enterAppointmentTitle() const {
 
 // Utility function for addAppointment and editAppointment
 string AppointmentManager::enterAppointmentNote() const {
-    std::cout << "Enter appointment description: ";
+    std::cout << "Enter appointment Note: ";
     std::string note;
     std::getline(std::cin, note);
     return note;

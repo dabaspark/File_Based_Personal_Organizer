@@ -19,6 +19,7 @@ public:
 private:
     TaskManager taskManager;
     AppointmentManager appointmentManager;
+    bool unsavedChanges_organizer;
 };
 
 #endif // ORGANIZER_H

@@ -454,7 +454,6 @@ void TaskManager::runWindow_Task() {
             })<< ", " << "File Status: " << (unsavedChanges ? "\033[1;31mNew Changes Not Saved to the File!\033[0m" : "Up to Date") << "\n";
 
         std::cout << "====================\n";
-        std::cout << "Menu:\n";
         std::cout << "1. Add Task\n";
         std::cout << "2. Display Tasks\n";
         std::cout << "3. Edit a Task\n";
@@ -463,12 +462,11 @@ void TaskManager::runWindow_Task() {
         std::cout << "6. Search Tasks by Keyword\n";
         std::cout << "7. Sort Tasks\n";
         std::cout << "8. Save Current Changes to the File\n";
-        std::cout << "9. Save and Quit\n";
-        std::cout << "10. Quit without Saving\n";
+        std::cout << "9. Go Back to Main Menu\n";
+        //std::cout << "9. Save and Quit\n";
+        //std::cout << "10. Quit without Saving\n";
         
-
-        //std::cout << "Enter your choice (1-10): ";
-        choice = getValidChoice(1, 10);
+        choice = getValidChoice(1, 9);
 
         switch (choice) {
             case 1:
@@ -498,30 +496,12 @@ void TaskManager::runWindow_Task() {
                 unsavedChanges = false;
                 break;
             case 9:
-                saveTasksToFile();
-                std::cout << "Tasks saved. Exiting program.\n";
-                break;
-            case 10:
-                if (unsavedChanges) {
-                    char exitChoice;
-                    std::cout << "Are you sure you want to exit without saving? (y/n): ";
-                    std::cin >> exitChoice;
-                    cin.ignore(1, '\n');
-                    if (tolower(exitChoice) == 'y') {
-                        std::cout << "Exiting program without saving.\n";
-                        return;
-                    } else {
-                        choice = 0; // Reset the choice to display the menu again
-                        std::cout << "Continuing the program.\n";
-                    }
-                } else {
-                    std::cout << "Exiting program.\n";
-                }
+                std::cout << "Going to the Main Menu.\n";
                 break;
             default:
-                std::cout << "Invalid choice. Please enter a number between 1 and 10.\n";
+                std::cout << "Invalid choice. Please enter a number between 1 and 9.\n";
         }
-    } while (choice != 9 && choice != 10);
+    } while (choice != 9);
 }
 
 // Utility functions for entering task details
