@@ -83,6 +83,8 @@ private:
     // Utility function for runWindow function
     int getValidChoice(int min, int max);
 
+    // Utility function for editTask function
+    std::string trim(const std::string& str);
 
 };
 

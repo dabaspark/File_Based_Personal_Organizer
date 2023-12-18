@@ -31,6 +31,7 @@ void TaskManager::addTask() {
     char choice;
     cout << "Are you sure you want to add this task? (y/n): ";
     cin >> choice;
+    cin.ignore(1, '\n');
     if (tolower(choice) != 'y' && tolower(choice) != 'Y') {
         cout << "Task not added.\n";
         return;
@@ -107,6 +108,7 @@ void TaskManager::listAndSortTasks() {
     char choice;
     std::cout << "Are you sure you want to change the order of the tasks? (y/n): ";
     std::cin >> choice;
+    cin.ignore(1, '\n');
     if (tolower(choice) != 'y' && tolower(choice) != 'Y') {
         // Revert to the original order
         tasks = originalTasks;
@@ -124,12 +126,27 @@ void TaskManager::listAndSortTasks() {
 void TaskManager::editTask() {
     string searchTitle;
     cout << "Enter the title of the task you want to edit: ";
-    cin.ignore(); // Ignore the newline character left in the buffer
+    // Clear the input buffer
+    //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    //std::cin.ignore();
     getline(cin, searchTitle);
+    
+    // Trim whitespaces from the input title
+    //searchTitle = trim(searchTitle);
+
+    // debug
+    /*
+    cout << "All task titles:\n";
+    for (const Task& task : tasks) {
+        cout << "- " << task.title << "\n";
+    }
+    cout << "searchTitle: " << searchTitle << "\n";
+    */
 
     auto it = find_if(tasks.begin(), tasks.end(), [&searchTitle](const Task& task) {
         return task.title == searchTitle;
     });
+
 
     if (it != tasks.end()) {
         Task editedTask = *it;  // Create a copy of the original task
@@ -145,13 +162,13 @@ void TaskManager::editTask() {
 
         int editOption;
         cin >> editOption;
-
+        cin.ignore(1, '\n');
         // Validate user input
         while (editOption < 1 || editOption > 5) {
             cout << "Invalid choice. Please enter a number between 1 and 5.\n";
             cin >> editOption;
+            cin.ignore(1, '\n');
         }
-        cin.ignore(); // Ignore the newline character left in the buffer
 
         // Perform editing based on user choice
         switch (editOption) {
@@ -180,7 +197,7 @@ void TaskManager::editTask() {
         char saveChoice;
         cout << "Are you sure you want to save the changes? (y/n): ";
         cin >> saveChoice;
-
+        cin.ignore(1, '\n');
         if (tolower(saveChoice) == 'y') {
             // If the user chooses to save, update the original task
             *it = editedTask;
@@ -202,7 +219,7 @@ void TaskManager::deleteTask() {
     string searchTitle;
     cout << "Enter the title of the task you want to delete: ";
 
-    cin.ignore(); // Ignore the newline character left in the buffer
+    //cin.ignore(); // Ignore the newline character left in the buffer
     
     getline(cin, searchTitle);
 
@@ -225,7 +242,7 @@ void TaskManager::deleteTask() {
         char deleteChoice;
         cout << "Are you sure you want to delete this task? (y/n): ";
         cin >> deleteChoice;
-
+        cin.ignore(1, '\n');
         if (tolower(deleteChoice) == 'y') {
             tasks.erase(it);
             cout << "Task deleted successfully!\n";
@@ -242,7 +259,7 @@ void TaskManager::deleteTask() {
 void TaskManager::markTaskCompleted() {
     string searchTitle;
     cout << "Enter the title of the task you want to mark as completed: ";
-    cin.ignore(); // Ignore the newline character left in the buffer
+    //cin.ignore(); // Ignore the newline character left in the buffer
     getline(cin, searchTitle);
 
     auto it = find_if(tasks.begin(), tasks.end(), [&searchTitle](const Task& task) {
@@ -267,7 +284,7 @@ void TaskManager::markTaskCompleted() {
 void TaskManager::searchTasksByKeyword() const {
     string keyword;
     cout << "Enter the keyword you want to search for: ";
-    cin.ignore(); // Ignore the newline character left in the buffer
+    //cin.ignore(); // Ignore the newline character left in the buffer
     getline(cin, keyword);
 
     // Remove leading and trailing spaces from the user-entered keyword
@@ -343,7 +360,7 @@ void TaskManager::loadTasksFromFile() {
         getline(file, task.deadline);
         file >> task.priority;
         file >> task.completed;
-        file.ignore(); // Ignore the newline character left in the buffer
+        file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the newline character left in the buffer
 
         getline(file, task.creationDate);
 
@@ -417,6 +434,7 @@ void TaskManager::runWindow() {
                     char exitChoice;
                     std::cout << "Are you sure you want to exit without saving? (y/n): ";
                     std::cin >> exitChoice;
+                    cin.ignore(1, '\n');
                     if (tolower(exitChoice) == 'y') {
                         std::cout << "Exiting program without saving.\n";
                         return;
@@ -463,7 +481,7 @@ int TaskManager::getValidChoice(int min, int max) {
 string TaskManager::enterTaskTitle() const {
     std::cout << "Enter task title: ";
     std::string title;
-    std::cin.ignore();
+    //std::cin.ignore();
     std::getline(std::cin, title);
     
     // check if the title is empty
@@ -613,4 +631,14 @@ bool TaskManager::isPastDeadline(const std::string& deadline) const {
 bool TaskManager::isValidDate(int year, int month, int day) const {
     // Some basic validation
     return (year >= 1900 && month >= 1 && month <= 12 && day >= 1 && day <= 31);
+}
+
+
+
+// utilitis for edittask
+// Function to trim whitespaces from both ends of a string
+std::string TaskManager::trim(const std::string& str) {
+    size_t start = str.find_first_not_of(" \t\r\n");
+    size_t end = str.find_last_not_of(" \t\r\n");
+    return (start != std::string::npos && end != std::string::npos) ? str.substr(start, end - start + 1) : "";
 }
