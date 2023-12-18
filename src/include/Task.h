@@ -89,8 +89,7 @@ private:
     std::string trim(const std::string& str);
 
     // utilitis for listAndSortTasks
-    void displayTasksDetailed(const std::vector<Task>& tasks);
-
+    void displayTasksDetailed(const std::vector<Task>& tasks, bool clearScreen);
 };
 
 #endif // TASK_H

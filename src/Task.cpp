@@ -13,17 +13,24 @@ TaskManager::TaskManager(const std::string& filename) : task_filename(filename) 
 // Destructor
 TaskManager::~TaskManager() {
     //saveTasksToFile();
+    // Clear the console
+    std::system("clear");
 }
 
 void TaskManager::addTask() {
     // Clear the console
     std::system("clear");
+
+    // Display the Heading of the menu
+    std::cout << "====================\n";
+    std::cout << "Main Menu >> Add Task:\n";
+    std::cout << "====================\n";
+
     // Display information about the add task process
     std::cout << "Add Task:\n";
     std::cout << "Please enter the details for the new task.\n";
     std::cout << "You will be prompted for the title, description, deadline, and priority.\n";
     std::cout << "You can choose to mark the task as completed later.\n";
-    std::cout << "Press Ctrl+C at any time to cancel.\n\n";
 
 
     Task newTask;
@@ -51,9 +58,9 @@ void TaskManager::addTask() {
     unsavedChanges = true;
     std::cout << "Task added successfully!\n";
 
-    std::cout << "You will re-directed to main Menu after "<< waiting_time << " seconds...\n";
-    // Pause for 3 seconds before returning to the main menu
-    std::this_thread::sleep_for(std::chrono::seconds(waiting_time));
+    // press any key to exit
+    std::cout << "Press any key to go back to main menu...\n";
+    std::cin.get();
     // Clear the console
     std::system("clear");
 }
@@ -61,9 +68,14 @@ void TaskManager::addTask() {
 void TaskManager::displayTasks(){
     // Clear the console
     std::system("clear");
+
+    // Display the Heading of the menu
+    std::cout << "====================\n";
+    std::cout << "Main Menu >> Display Tasks:\n";
+    std::cout << "====================\n";
+
     // ask the user to show it in Table format or normal format
     int choice;
-    std::cout << "Display Tasks:\n";
     std::cout << "1. Detailed Format\n";
     std::cout << "2. Table Format\n";
     choice = getValidChoice(1, 2);
@@ -74,7 +86,7 @@ void TaskManager::displayTasks(){
     std::cout << "-----------------------------------------------\n";
     if (choice == 2) {
         // Display tasks in detailed format
-        displayTasksDetailed(tasks);
+        displayTasksDetailed(tasks, false);
     } else { 
         std::cout << "Tasks:\n";
 
@@ -89,8 +101,8 @@ void TaskManager::displayTasks(){
         }
     }
 
-    // press any key to exit
-    std::cout << "Press any key to exit...\n";
+    // press any key to go back to main menu
+    std::cout << "Press any key to go back to main menu...\n";
     std::cin.get();
     // Clear the console
     std::system("clear");
@@ -98,6 +110,14 @@ void TaskManager::displayTasks(){
 
 void TaskManager::listAndSortTasks() {
     int sortOption;
+
+    // Clear the console
+    std::system("clear");
+
+    // Display the Heading of the menu
+    std::cout << "====================\n";
+    std::cout << "Main Menu >> List and Sort Tasks:\n";
+    std::cout << "====================\n";
 
     // Display sorting options
     std::cout << "Sort tasks by:\n";
@@ -142,7 +162,7 @@ void TaskManager::listAndSortTasks() {
     }
 
     // Display sorted tasks in detailed format
-    displayTasksDetailed(tasks);
+    displayTasksDetailed(tasks, false);
 
     // Ask the user for confirmation
     char choice;
@@ -158,6 +178,12 @@ void TaskManager::listAndSortTasks() {
 
     std::cout << "Task order changed!\n";
     unsavedChanges = true;
+
+    // press any key to go back to main menu
+    std::cout << "Press any key to go back to main menu...\n";
+    std::cin.get();
+    // Clear the console
+    std::system("clear");
 }
 
 
@@ -165,7 +191,25 @@ void TaskManager::listAndSortTasks() {
 
 void TaskManager::editTask() {
     string searchTitle;
-    displayTasksDetailed(tasks);
+
+    // Clear the console
+    std::system("clear");
+
+    // Display the Heading of the menu
+    std::cout << "====================\n";
+    std::cout << "Main Menu >> Edit Tasks:\n";
+    std::cout << "====================\n";
+
+    // Display information about the edit task process
+    std::cout << "You will be prompted for the title of the task to be changed\n";
+    std::cout << "Then, specify which field you want to edit.\n";
+    std::cout << "---------------------------------------------\n";
+    std::cout << "The List of The tasks are:\n";
+    std::cout << "---------------------------------------------\n";
+    displayTasksDetailed(tasks, false);
+
+    // Get the title of the task to be edited
+    std::cout << "---------------------------------------------\n";
     cout << "Enter the title of the task you want to edit: ";
     // Clear the input buffer
     //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -252,13 +296,34 @@ void TaskManager::editTask() {
     } else {
         cout << "Task not found.\n";
     }
+
+    // press any key to go back to main menu
+    std::cout << "Press any key to go back to main menu...\n";
+    std::cin.get();
+    // Clear the console
+    std::system("clear");
 }
 
 
 
 void TaskManager::deleteTask() {
     string searchTitle;
-    displayTasksDetailed(tasks);
+    std::system("clear");
+
+    // Display the Heading of the menu
+    std::cout << "====================\n";
+    std::cout << "Main Menu >> Delete Tasks:\n";
+    std::cout << "====================\n";
+
+    // Display information about the delete task process
+    std::cout << "You will be prompted for the title of the task to be deleted\n";
+    std::cout << "Then, specify which field you want to edit.\n";
+    std::cout << "---------------------------------------------\n";
+    std::cout << "The List of The tasks are:\n";
+    std::cout << "---------------------------------------------\n";
+
+    displayTasksDetailed(tasks, false);
+    std::cout << "---------------------------------------------\n";
     cout << "Enter the title of the task you want to delete: ";
 
     //cin.ignore(); // Ignore the newline character left in the buffer
@@ -295,11 +360,34 @@ void TaskManager::deleteTask() {
     } else {
         cout << "Task not found.\n";
     }
+
+    // press any key to go back to main menu
+    std::cout << "Press any key to go back to main menu...\n";
+    std::cin.get();
+    // Clear the console
+    std::system("clear");
 }
 
 
 void TaskManager::markTaskCompleted() {
     string searchTitle;
+
+    // Clear the console
+    std::system("clear");
+
+    // Display the Heading of the menu
+    std::cout << "====================\n";
+    std::cout << "Main Menu >> Mark Task Completed:\n";
+    std::cout << "====================\n";
+
+    // Display information about the add task process
+    std::cout << "You will be prompted for the title of the task to mark completed\n";
+    std::cout << "---------------------------------------------\n";
+    std::cout << "The List of The tasks are:\n";
+    std::cout << "---------------------------------------------\n";
+    displayTasksDetailed(tasks, false);
+
+    std::cout << "---------------------------------------------\n";
     cout << "Enter the title of the task you want to mark as completed: ";
     //cin.ignore(); // Ignore the newline character left in the buffer
     getline(cin, searchTitle);
@@ -319,13 +407,27 @@ void TaskManager::markTaskCompleted() {
     } else {
         cout << "Task not found.\n";
     }
+
+    // press any key to go back to main menu
+    std::cout << "Press any key to go back to main menu...\n";
+    std::cin.get();
+    // Clear the console
+    std::system("clear");
 }
 
 
 // Function to search tasks by keywords
 void TaskManager::searchTasksByKeyword() const {
     string keyword;
-    cout << "Enter the keyword you want to search for: ";
+
+    // Clear the console
+    std::system("clear");
+    // Display the Heading of the menu
+    std::cout << "====================\n";
+    std::cout << "Main Menu >> Search Tasks By Keyword:\n";
+    std::cout << "====================\n";
+
+    cout << "Enter the keyword of the task you want to search for: ";
     //cin.ignore(); // Ignore the newline character left in the buffer
     getline(cin, keyword);
 
@@ -369,6 +471,12 @@ void TaskManager::searchTasksByKeyword() const {
             cout << "-----------------\n";
         }
     }
+
+    // press any key to go back to main menu
+    std::cout << "Press any key to go back to main menu...\n";
+    std::cin.get();
+    // Clear the console
+    std::system("clear");
 }
 
 
@@ -414,9 +522,16 @@ void TaskManager::loadTasksFromFile() {
 
 void TaskManager::runWindow() {
     int choice;
-    // Clear the console
-    std::system("clear");
+
     do {
+        // Clear the console
+        std::system("clear");
+
+        // Display the menu
+        std::cout << "====================\n";
+        std::cout << "Main Menu\n";
+        std::cout << "====================\n";
+
         std::cout << "Number of tasks: " << tasks.size() <<", "
             << "Completed tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
                 return task.completed;
@@ -688,9 +803,11 @@ std::string TaskManager::trim(const std::string& str) {
 
 
 // utilitis for listAndSortTasks
-void TaskManager::displayTasksDetailed(const std::vector<Task>& tasks) {
-    // Clear the console
-    std::system("clear");
+void TaskManager::displayTasksDetailed(const std::vector<Task>& tasks, bool clearScreen) {
+    if (clearScreen) {
+        // Clear the console
+        std::system("clear");
+    }
 
     // Display the sorted tasks in a detailed format
     const int columnWidth = 20;
