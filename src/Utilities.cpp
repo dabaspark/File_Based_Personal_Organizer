@@ -3,7 +3,7 @@
 #include "include/Utilities.h"
 #include <iomanip>
 #include <chrono> // Include the necessary header file for std::chrono library
-
+#include <regex> // Include the necessary header file for std::regex
 
 int getValidChoice(int min, int max) {
     int choice;
@@ -78,13 +78,19 @@ void print_menu_header(const std::string& header, bool clear_screen){
     std::cout << "====================\n";
 }
 
-void print_menu_tail(const std::string& go_back_to, bool clear_screen){
-    // press any key to exit
-    std::cout << "Press any key to go back to " << go_back_to << ".\n";
-    std::cin.get();
 
-    if (clear_screen){
-        // Clear the console
-        std::system("clear");
-    }
+
+bool isValidTimeFormat(const std::string& time) {
+    // Define the expected time format
+    std::regex timeFormat(R"([0-9]{2}:[0-9]{2})");
+
+    // Check if the entered time matches the expected format
+    return std::regex_match(time, timeFormat);
+}
+
+// Function to trim whitespaces from both ends of a string
+std::string trim(const std::string& str) {
+    size_t start = str.find_first_not_of(" \t\r\n");
+    size_t end = str.find_last_not_of(" \t\r\n");
+    return (start != std::string::npos && end != std::string::npos) ? str.substr(start, end - start + 1) : "";
 }

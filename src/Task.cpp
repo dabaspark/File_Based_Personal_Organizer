@@ -25,7 +25,7 @@ void TaskManager::addTask() {
     std::cout << "Please enter the details for the new task.\n";
     std::cout << "You will be prompted for the title, description, deadline, and priority.\n";
     std::cout << "You can choose to mark the task as completed later.\n";
-
+    std::cout << "---------------------------------------------\n";
 
     Task newTask;
 
@@ -304,24 +304,14 @@ void TaskManager::deleteTask() {
         cout << "Task not found.\n";
     }
 
-    // press any key to go back to main menu
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
+    print_menu_tail("Tasks Menu", true);
 }
 
 
 void TaskManager::markTaskCompleted() {
     string searchTitle;
 
-    // Clear the console
-    std::system("clear");
-
-    // Display the Heading of the menu
-    std::cout << "====================\n";
-    std::cout << "Main Menu >> Mark Task Completed:\n";
-    std::cout << "====================\n";
+    print_menu_header("Main Menu >> Tasks Menu >> Mark Task Completed", true);
 
     // Display information about the add task process
     std::cout << "You will be prompted for the title of the task to mark completed\n";
@@ -351,11 +341,7 @@ void TaskManager::markTaskCompleted() {
         cout << "Task not found.\n";
     }
 
-    // press any key to go back to main menu
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
+    print_menu_tail("Tasks Menu", true);
 }
 
 
@@ -363,12 +349,7 @@ void TaskManager::markTaskCompleted() {
 void TaskManager::searchTasksByKeyword() const {
     string keyword;
 
-    // Clear the console
-    std::system("clear");
-    // Display the Heading of the menu
-    std::cout << "====================\n";
-    std::cout << "Main Menu >> Search Tasks By Keyword:\n";
-    std::cout << "====================\n";
+    print_menu_header("Main Menu >> Tasks Menu >> Search Tasks By Keyword", true);
 
     cout << "Enter the keyword of the task you want to search for: ";
     //cin.ignore(); // Ignore the newline character left in the buffer
@@ -415,11 +396,7 @@ void TaskManager::searchTasksByKeyword() const {
         }
     }
 
-    // press any key to go back to main menu
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
+    print_menu_tail("Tasks Menu", true);
 }
 
 
@@ -467,29 +444,25 @@ void TaskManager::runWindow_Task() {
     int choice;
 
     do {
-        // Clear the console
-        std::system("clear");
-        // Display the menu
-        std::cout << "====================\n";
-        std::cout << "Main Menu\n";
-        std::cout << "====================\n";
-        std::cout << "Number of tasks: " << tasks.size() <<", "
-            << "Completed tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
+        print_menu_header("Main Menu >> Tasks Menu", true);
+        
+        std::cout << "Number of Tasks: " << tasks.size() <<", "
+            << "Completed Tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
                 return task.completed;
-            }) << ", " << "Incomplete tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
+            }) << ", " << "Incomplete Tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
                 return !task.completed;
-            })<< ", " << "File Status: " << (unsavedChanges ? "\033[1;31mNew changes not saved to the file!\033[0m" : "Up to Date") << "\n";
+            })<< ", " << "File Status: " << (unsavedChanges ? "\033[1;31mNew Changes Not Saved to the File!\033[0m" : "Up to Date") << "\n";
 
         std::cout << "====================\n";
         std::cout << "Menu:\n";
         std::cout << "1. Add Task\n";
         std::cout << "2. Display Tasks\n";
-        std::cout << "3. Edit Task\n";
-        std::cout << "4. Delete Task\n";
+        std::cout << "3. Edit a Task\n";
+        std::cout << "4. Delete a Task\n";
         std::cout << "5. Mark Task as Completed\n";
         std::cout << "6. Search Tasks by Keyword\n";
         std::cout << "7. Sort Tasks\n";
-        std::cout << "8. Save Current Changes to File\n";
+        std::cout << "8. Save Current Changes to the File\n";
         std::cout << "9. Save and Quit\n";
         std::cout << "10. Quit without Saving\n";
         
@@ -668,15 +641,6 @@ int TaskManager::enterTaskPriority() const {
 
     return priority;
 }
-
-// utilitis for edittask
-// Function to trim whitespaces from both ends of a string
-std::string TaskManager::trim(const std::string& str) {
-    size_t start = str.find_first_not_of(" \t\r\n");
-    size_t end = str.find_last_not_of(" \t\r\n");
-    return (start != std::string::npos && end != std::string::npos) ? str.substr(start, end - start + 1) : "";
-}
-
 
 // utilitis for listAndSortTasks
 void TaskManager::displayTasksDetailed(const std::vector<Task>& tasks, bool clearScreen) {

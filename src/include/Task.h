@@ -82,9 +82,6 @@ private:
     bool isPastDeadline(const std::string& deadline) const;
     bool isValidDate(int year, int month, int day) const;
 
-    // Utility function for editTask function
-    std::string trim(const std::string& str);
-
     // utilitis for listAndSortTasks
     void displayTasksDetailed(const std::vector<Task>& tasks, bool clearScreen);
 };

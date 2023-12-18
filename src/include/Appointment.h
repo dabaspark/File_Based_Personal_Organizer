@@ -51,9 +51,6 @@ public:
     // Function to delete a Appointment
     void deleteAppointment();
 
-    // Function to mark an Appointment as completed
-    void markAppointmentCompleted();
-
     // Function to search for an Appointment
     void searchAppointmentsByKeyword() const;
 
@@ -79,9 +76,6 @@ private:
     string enterAppointmentNote() const;
     string enterAppointmentDate() const;
     string enterAppointmentTime() const;
-
-    // Utility function for editAppointment function
-    std::string trim(const std::string& str);
 
     // utilitis for listAndSortAppointments
     void displayAppointmentsDetailed(const std::vector<Appointment>& appointments, bool clearScreen);

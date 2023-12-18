@@ -18,12 +18,11 @@ void AppointmentManager::addAppointment() {
     
     print_menu_header("Main Menu >> Appointments Menu >> Add an Appointment", true); // Clear the console
 
-    // Display information about the add task process
+    // Display information about the add Appointment process
     std::cout << "Add appointment:\n";
     std::cout << "Please enter the details for the new appointment.\n";
     std::cout << "You will be prompted for the title, note, date, and time.\n";
-    std::cout << "You can choose to mark the task as completed later.\n";
-
+    std::cout << "---------------------------------------------\n";
 
     Appointment newAppointment;
 
@@ -89,7 +88,7 @@ void AppointmentManager::listAndSortAppointments() {
     print_menu_header("Main Menu >> Appointments Menu >> List and Sort Appointments", true); // Clear the console
 
     // Display sorting options
-    std::cout << "Sort tasks by:\n";
+    std::cout << "Sort appointments by:\n";
     std::cout << "1. Title\n";
     std::cout << "2. Date\n";
     std::cout << "3. Creation Date\n";
@@ -244,113 +243,54 @@ void AppointmentManager::deleteAppointment() {
     std::cout << "The List of the Appointments are:\n";
     std::cout << "---------------------------------------------\n";
 
-    displayTasksDetailed(tasks, false);
+    displayAppointmentsDetailed(appointments, false);
     std::cout << "---------------------------------------------\n";
-    cout << "Enter the title of the task you want to delete: ";
+    cout << "Enter the title of the appointment you want to delete: ";
 
-    //cin.ignore(); // Ignore the newline character left in the buffer
-    
     getline(cin, searchTitle);
 
-    auto it = find_if(tasks.begin(), tasks.end(), [&searchTitle](const Task& task) {
-        return task.title == searchTitle;
+    auto it = find_if(appointments.begin(), appointments.end(), [&searchTitle](const Appointment& appointment) {
+        return appointment.title == searchTitle;
     });
 
-    if (it != tasks.end()) {
-        // Display task details
-        cout << "Task details:\n";
+    if (it != appointments.end()) {
+        // Display Appointment details
+        cout << "Appointment details:\n";
         cout << "Title: " << it->title << "\n";
-        cout << "Description: " << it->description << "\n";
-        cout << "Deadline: " << it->deadline << "\n";
-        cout << "Priority: " << it->priority << "\n";
-        cout << "Status: " << (it->completed ? "Completed" : "Incomplete") << "\n";
+        cout << "Note: " << it->note << "\n";
+        cout << "Date: " << it->date << "\n";
+        cout << "Time: " << it->time << "\n";
         cout << "Creation Date: " << it->creationDate << "\n";
         cout << "-----------------\n";
 
         // Ask the user for confirmation
         char deleteChoice;
-        cout << "Are you sure you want to delete this task? (y/n): ";
+        cout << "Are you sure you want to delete this appointment? (y/n): ";
         cin >> deleteChoice;
         cin.ignore(1, '\n');
         if (tolower(deleteChoice) == 'y') {
-            tasks.erase(it);
-            cout << "Task deleted successfully!\n";
+            appointments.erase(it);
+            cout << "Appointment deleted successfully!\n";
             unsavedChanges = true;
         } else {
             cout << "Deletion canceled.\n";
         }
     } else {
-        cout << "Task not found.\n";
+        cout << "Appointment not found.\n";
     }
 
-    // press any key to go back to main menu
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
+    print_menu_tail("Appointments Menu", true); // Clear the console
 }
 
 
-void AppointmentManager::markTaskCompleted() {
-    string searchTitle;
-
-    // Clear the console
-    std::system("clear");
-
-    // Display the Heading of the menu
-    std::cout << "====================\n";
-    std::cout << "Main Menu >> Mark Task Completed:\n";
-    std::cout << "====================\n";
-
-    // Display information about the add task process
-    std::cout << "You will be prompted for the title of the task to mark completed\n";
-    std::cout << "---------------------------------------------\n";
-    std::cout << "The List of The tasks are:\n";
-    std::cout << "---------------------------------------------\n";
-    displayTasksDetailed(tasks, false);
-
-    std::cout << "---------------------------------------------\n";
-    cout << "Enter the title of the task you want to mark as completed: ";
-    //cin.ignore(); // Ignore the newline character left in the buffer
-    getline(cin, searchTitle);
-
-    auto it = find_if(tasks.begin(), tasks.end(), [&searchTitle](const Task& task) {
-        return task.title == searchTitle;
-    });
-
-    if (it != tasks.end()) {
-        if (it->completed) {
-            cout << "Task is already marked as completed.\n";
-        } else {
-            it->completed = true;
-            cout << "Task marked as completed!\n";
-            unsavedChanges = true;
-        }
-    } else {
-        cout << "Task not found.\n";
-    }
-
-    // press any key to go back to main menu
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
-}
-
-
-// Function to search tasks by keywords
-void AppointmentManager::searchTasksByKeyword() const {
+// Function to search appointment by keywords
+void AppointmentManager::searchAppointmentsByKeyword() const {
     string keyword;
 
-    // Clear the console
-    std::system("clear");
-    // Display the Heading of the menu
-    std::cout << "====================\n";
-    std::cout << "Main Menu >> Search Tasks By Keyword:\n";
-    std::cout << "====================\n";
+    print_menu_header("Main Menu >> Appointments Menu >> Search Appointments By Keyword", true); // Clear the console
 
-    cout << "Enter the keyword of the task you want to search for: ";
-    //cin.ignore(); // Ignore the newline character left in the buffer
+    cout << "Enter the keyword of the appointment you want to search for: ";
+    
     getline(cin, keyword);
 
     // Remove leading and trailing spaces from the user-entered keyword
@@ -364,15 +304,15 @@ void AppointmentManager::searchTasksByKeyword() const {
 
     keyword = std::string(keywordBegin, keywordEnd);
 
-    cout << "Tasks:\n";
+    cout << "Appointments:\n";
 
-    for (const Task& task : tasks) {
-        // Remove leading and trailing spaces from the task title
-        auto titleBegin = std::find_if(task.title.begin(), task.title.end(), [](char c) {
+    for (const Appointment& appointment : appointments) {
+        // Remove leading and trailing spaces from the Appointment title
+        auto titleBegin = std::find_if(appointment.title.begin(), appointment.title.end(), [](char c) {
             return !std::isspace(c);
         });
 
-        auto titleEnd = std::find_if(task.title.rbegin(), task.title.rend(), [](char c) {
+        auto titleEnd = std::find_if(appointment.title.rbegin(), appointment.title.rend(), [](char c) {
             return !std::isspace(c);
         }).base();
 
@@ -381,162 +321,124 @@ void AppointmentManager::searchTasksByKeyword() const {
         // Compare with the user-entered keyword (ignoring case)
         if (std::search(trimmedTitle.begin(), trimmedTitle.end(), keyword.begin(), keyword.end(),
             [](char c1, char c2) { return std::toupper(c1) == std::toupper(c2); }) != trimmedTitle.end() ||
-            std::search(task.description.begin(), task.description.end(), keyword.begin(), keyword.end(),
-            [](char c1, char c2) { return std::toupper(c1) == std::toupper(c2); }) != task.description.end()) {
-            // Display the task details
-            cout << "Title: " << task.title << "\n";
-            cout << "Description: " << task.description << "\n";
-            cout << "Deadline: " << task.deadline << "\n";
-            cout << "Priority: " << task.priority << "\n";
-            cout << "Status: " << (task.completed ? "Completed" : "Incomplete") << "\n";
-            cout << "Creation Date: " << task.creationDate << "\n";
+            std::search(appointment.note.begin(), appointment.note.end(), keyword.begin(), keyword.end(),
+            [](char c1, char c2) { return std::toupper(c1) == std::toupper(c2); }) != appointment.note.end()) {
+            // Display the Appointment details
+            cout << "Title: " << appointment.title << "\n";
+            cout << "Note: " << appointment.note << "\n";
+            cout << "Date: " << appointment.date << "\n";
+            cout << "Time: " << appointment.time << "\n";
+            cout << "Creation Date: " << appointment.creationDate << "\n";
             cout << "-----------------\n";
         }
     }
 
-    // press any key to go back to main menu
-    std::cout << "Press any key to go back to main menu...\n";
-    std::cin.get();
-    // Clear the console
-    std::system("clear");
+    print_menu_tail("Appointments Menu", true); // Clear the console
 }
 
 
 
-void AppointmentManager::saveTasksToFile() const {
-    ofstream file(task_filename);
+void AppointmentManager::saveAppointmentsToFile() const {
+    ofstream file(appointment_filename);
 
-    for (const Task& task : tasks) {
-        file << task.title << "\n";
-        file << task.description << "\n";
-        file << task.deadline << "\n";
-        file << task.priority << "\n";
-        file << task.completed << "\n";
-        file << task.creationDate<< "\n";
+    for (const Appointment& appointment : appointments) {
+        file << appointment.title << "\n";
+        file << appointment.note << "\n";
+        file << appointment.date << "\n";
+        file << appointment.time << "\n";
+        file << appointment.creationDate<< "\n";
     }
 
     file.close();
 }
 
-void AppointmentManager::loadTasksFromFile() {
-    ifstream file(task_filename);
+void AppointmentManager::loadAppointmentsFromFile() {
+    ifstream file(appointment_filename);
 
     if (!file) {
-        cout << "File not found. Starting with an empty task list.\n";
+        cout << "File not found. Starting with an empty Appointment list.\n";
         return;
     }
 
-    Task task;
-    while (getline(file, task.title)) {
-        getline(file, task.description);
-        getline(file, task.deadline);
-        file >> task.priority;
-        file >> task.completed;
+    Appointment appointment;
+    while (getline(file, appointment.title)) {
+        getline(file, appointment.note);
+        getline(file, appointment.date);
+        file >> appointment.time;
         file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the newline character left in the buffer
 
-        getline(file, task.creationDate);
+        getline(file, appointment.creationDate);
 
-        tasks.push_back(task);
+        appointments.push_back(appointment);
     }
 
     file.close();
 }
 
-void AppointmentManager::runWindow_Task() {
+void AppointmentManager::runWindow_Appointment() {
     int choice;
 
     do {
-        // Clear the console
-        std::system("clear");
-        // Display the menu
-        std::cout << "====================\n";
-        std::cout << "Main Menu\n";
-        std::cout << "====================\n";
-        std::cout << "Number of tasks: " << tasks.size() <<", "
-            << "Completed tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
-                return task.completed;
-            }) << ", " << "Incomplete tasks: " << std::count_if(tasks.begin(), tasks.end(), [](const Task& task) {
-                return !task.completed;
-            })<< ", " << "File Status: " << (unsavedChanges ? "\033[1;31mNew changes not saved to the file!\033[0m" : "Up to Date") << "\n";
+        print_menu_header("Main Menu >> Appointments Menu", true);
+        
+        std::cout << "Number of Appointments: " << appointments.size() <<", "
+            << "File Status: " << (unsavedChanges ? "\033[1;31mNew Changes Not Saved to the File!\033[0m" : "Up to Date") << "\n";
 
         std::cout << "====================\n";
         std::cout << "Menu:\n";
-        std::cout << "1. Add Task\n";
-        std::cout << "2. Display Tasks\n";
-        std::cout << "3. Edit Task\n";
-        std::cout << "4. Delete Task\n";
-        std::cout << "5. Mark Task as Completed\n";
-        std::cout << "6. Search Tasks by Keyword\n";
-        std::cout << "7. Sort Tasks\n";
-        std::cout << "8. Save Current Changes to File\n";
-        std::cout << "9. Save and Quit\n";
-        std::cout << "10. Quit without Saving\n";
-        
+        std::cout << "1. Add Appointment\n";
+        std::cout << "2. Display Appointments\n";
+        std::cout << "3. Edit an Appointment\n";
+        std::cout << "4. Delete an Appointment\n";
 
-        //std::cout << "Enter your choice (1-10): ";
-        choice = getValidChoice(1, 10);
+        std::cout << "5. Search Appointments by Keyword\n";
+        std::cout << "6. Sort Appointments\n";
+        std::cout << "7. Save Current Changes to the File\n";
+        std::cout << "8. Go Back to Main Menu\n";
+        
+        choice = getValidChoice(1, 8);
 
         switch (choice) {
             case 1:
-                addTask();
+                addAppointment();
                 break;
             case 2:
-                displayTasks();
+                displayAppointments();
                 break;
             case 3:
-                editTask();
+                editAppointment();
                 break;
             case 4:
-                deleteTask();
+                deleteAppointment();
                 break;
+
             case 5:
-                markTaskCompleted();
+                searchAppointmentsByKeyword();
                 break;
             case 6:
-                searchTasksByKeyword();
+                listAndSortAppointments();
                 break;
             case 7:
-                listAndSortTasks();
-                break;
-            case 8:
-                saveTasksToFile();
-                std::cout << "Tasks saved. \n";
+                saveAppointmentsToFile();
+                std::cout << "Appointments saved. \n";
                 unsavedChanges = false;
                 break;
-            case 9:
-                saveTasksToFile();
-                std::cout << "Tasks saved. Exiting program.\n";
-                break;
-            case 10:
-                if (unsavedChanges) {
-                    char exitChoice;
-                    std::cout << "Are you sure you want to exit without saving? (y/n): ";
-                    std::cin >> exitChoice;
-                    cin.ignore(1, '\n');
-                    if (tolower(exitChoice) == 'y') {
-                        std::cout << "Exiting program without saving.\n";
-                        return;
-                    } else {
-                        choice = 0; // Reset the choice to display the menu again
-                        std::cout << "Continuing the program.\n";
-                    }
-                } else {
-                    std::cout << "Exiting program.\n";
-                }
+            case 8:
+                std::cout << "Going to the Main Menu.\n";
                 break;
             default:
                 std::cout << "Invalid choice. Please enter a number between 1 and 10.\n";
         }
-    } while (choice != 9 && choice != 10);
+    } while (choice != 8);
 }
 
-// Utility functions for entering task details
+// Utility functions for entering Appointments details
 
-// Utility function to enter task title
-string AppointmentManager::enterTaskTitle() const {
-    std::cout << "Enter task title: ";
+// Utility function to enter Appointment title
+string AppointmentManager::enterAppointmentTitle() const {
+    std::cout << "Enter appointment title: ";
     std::string title;
-    //std::cin.ignore();
+
     std::getline(std::cin, title);
     
     // check if the title is empty
@@ -547,13 +449,13 @@ string AppointmentManager::enterTaskTitle() const {
     while (
     title.empty() ||
     std::all_of(title.begin(), title.end(), [](char c) { return std::isspace(c); }) ||
-    std::any_of(tasks.begin(), tasks.end(), [&title](const Task& task) { return task.title == title; }) ||
+    std::any_of(appointments.begin(), appointments.end(), [&title](const Appointment& appointment) { return appointment.title == title; }) ||
     std::isdigit(title.front()) ||
     std::all_of(title.begin(), title.end(), [](char c) { return std::isdigit(c); })
     ) {
         if (title.empty() || std::all_of(title.begin(), title.end(), [](char c) { return std::isspace(c); })) {
             std::cout << "Title cannot be empty or consist of spaces only. Please enter a valid title: ";
-        } else if (std::any_of(tasks.begin(), tasks.end(), [&title](const Task& task) { return task.title == title; })) {
+        } else if (std::any_of(appointments.begin(), appointments.end(), [&title](const Appointment& appointment) { return appointment.title == title; })) {
             std::cout << "Title already used. Please enter a different title: ";
         } else if (std::isdigit(title.front()) || std::all_of(title.begin(), title.end(), [](char c) { return std::isdigit(c); })) {
             std::cout << "Title cannot start with a number or consist only of numbers. Please enter a valid title: ";
@@ -567,123 +469,70 @@ string AppointmentManager::enterTaskTitle() const {
     return title;
 }
 
-// Utility function for addTask and editTask
-string AppointmentManager::enterTaskDescription() const {
-    std::cout << "Enter task description: ";
-    std::string description;
-    std::getline(std::cin, description);
-    return description;
+// Utility function for addAppointment and editAppointment
+string AppointmentManager::enterAppointmentNote() const {
+    std::cout << "Enter appointment description: ";
+    std::string note;
+    std::getline(std::cin, note);
+    return note;
 }
 
 
-std::string AppointmentManager::enterTaskDeadline() const {
-    std::cout << "Enter task deadline (YYYY-MM-DD): ";
-    std::string deadline;
+std::string AppointmentManager::enterAppointmentDate() const {
+    std::cout << "Enter appointment date (YYYY-MM-DD): ";
+    std::string date;
     do {
-        std::getline(std::cin, deadline);
-        if (deadline.empty()) {
-            std::cout << "Error: Deadline cannot be empty. Please enter a valid deadline (YYYY-MM-DD): ";
-        } else if (!isValidDateFormat(deadline)) {
-            std::cout << "Error: Invalid date format. Please enter a valid deadline (YYYY-MM-DD): ";
-        } else if (isPast(deadline)) {
-            std::cout << "Error: Deadline cannot be in the past. Please enter a future deadline: ";
+        std::getline(std::cin, date);
+        if (date.empty()) {
+            std::cout << "Error: date cannot be empty. Please enter a valid date (YYYY-MM-DD): ";
+        } else if (!isValidDateFormat(date)) {
+            std::cout << "Error: Invalid date format. Please enter a valid date (YYYY-MM-DD): ";
+        } else if (isPast(date)) {
+            std::cout << "Error: Appointment Date cannot be in the past. Please enter a future date: ";
         }
-    } while (deadline.empty() || !isValidDateFormat(deadline) || isPast(deadline));
-    return deadline;
+    } while (date.empty() || !isValidDateFormat(date) || isPast(date));
+    return date;
 }
 
-// enter task priority
-
-int AppointmentManager::enterTaskPriority() const {
-    int priority;
-    bool isValidInput;
-
+std::string AppointmentManager::enterAppointmentTime() const {
+    std::cout << "Enter appointment time (HH:MM): ";
+    std::string time;
     do {
-        isValidInput = true; // Assume input is valid unless proven otherwise
-
-        std::cout << "Enter task priority (1-5): ";
-
-        std::string input;
-        std::getline(std::cin, input);
-
-        // Check if the input is empty
-        if (input.empty()) {
-            std::cout << "Invalid input. Please enter a value.\n";
-            isValidInput = false;
-            continue;  // Skip the rest of the loop for empty input
+        std::getline(std::cin, time);
+        if (time.empty()) {
+            std::cout << "Error: time cannot be empty. Please enter a valid time (HH:MM): ";
+        } else if (!isValidTimeFormat(time)) {
+            std::cout << "Error: Invalid time format. Please enter a valid time (HH:MM): ";
         }
-
-        // Check if the input consists only of digits
-        if (!std::all_of(input.begin(), input.end(), ::isdigit)) {
-            std::cout << "Invalid input. Please enter a valid integer.\n";
-            isValidInput = false;
-            continue;  // Skip the rest of the loop for non-numeric input
-        }
-
-        try {
-            size_t pos;
-            priority = std::stoi(input, &pos);
-
-            // Check if the entire input was converted to an integer
-            if (pos < input.size()) {
-                throw std::invalid_argument("Invalid input. Please enter an integer.");
-            }
-
-            // Check if the input is within the valid range
-            if (priority < 1 || priority > 5) {
-                std::cout << "Invalid input. Priority must be between 1 and 5.\n";
-                isValidInput = false;
-            }
-
-        } catch (const std::invalid_argument& e) {
-            std::cout << e.what() << "\n";
-            isValidInput = false;
-        } catch (const std::out_of_range& e) {
-            std::cout << "Invalid input. Entered value is out of range for integer.\n";
-            isValidInput = false;
-        }
-
-    } while (!isValidInput);
-
-    return priority;
+    } while (time.empty() || !isValidTimeFormat(time));
+    return time;
 }
 
-// utilitis for edittask
-// Function to trim whitespaces from both ends of a string
-std::string AppointmentManager::trim(const std::string& str) {
-    size_t start = str.find_first_not_of(" \t\r\n");
-    size_t end = str.find_last_not_of(" \t\r\n");
-    return (start != std::string::npos && end != std::string::npos) ? str.substr(start, end - start + 1) : "";
-}
-
-
-// utilitis for listAndSortTasks
-void AppointmentManager::displayTasksDetailed(const std::vector<Task>& tasks, bool clearScreen) {
+// utilitis for listAndSortAppointments
+void AppointmentManager::displayAppointmentsDetailed(const std::vector<Appointment>& appointments, bool clearScreen) {
     if (clearScreen) {
         // Clear the console
         std::system("clear");
     }
 
-    // Display the sorted tasks in a detailed format
+    // Display the sorted Appointments in a detailed format
     const int columnWidth = 20;
 
-    std::cout << std::left << std::setw(columnWidth) << "Task Name";
-    std::cout << std::setw(columnWidth) << "Deadline";
-    std::cout << std::setw(columnWidth) << "Priority";
-    std::cout << std::setw(columnWidth) << "Completed";
+    std::cout << std::left << std::setw(columnWidth) << "Appointment Name";
+    std::cout << std::setw(columnWidth) << "Date";
+    std::cout << std::setw(columnWidth) << "Time";
     std::cout << std::setw(columnWidth) << "Creation Date\n";
     std::cout << std::string(5 * columnWidth, '-') << "\n";
 
-    for (const Task& task : tasks) {
-        // Truncate task title to fit column width
-        std::string truncatedTitle = task.title.substr(0, columnWidth - 3);
-        if (task.title.length() > columnWidth)
+    for (const Appointment& appointment : appointments) {
+        // Truncate Appointment title to fit column width
+        std::string truncatedTitle = appointment.title.substr(0, columnWidth - 3);
+        if (appointment.title.length() > columnWidth)
             truncatedTitle += "...";
 
         std::cout << std::setw(columnWidth) << truncatedTitle;
-        std::cout << std::setw(columnWidth) << task.deadline;
-        std::cout << std::setw(columnWidth) << task.priority;
-        std::cout << std::setw(columnWidth) << (task.completed ? "Yes" : "No");
-        std::cout << std::setw(columnWidth) << task.creationDate << "\n";
+        std::cout << std::setw(columnWidth) << appointment.date;
+        std::cout << std::setw(columnWidth) << appointment.time;
+        std::cout << std::setw(columnWidth) << appointment.creationDate << "\n";
     }
 }
