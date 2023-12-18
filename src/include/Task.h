@@ -86,6 +86,9 @@ private:
     // Utility function for editTask function
     std::string trim(const std::string& str);
 
+    // utilitis for listAndSortTasks
+    void displayTasksDetailed(const std::vector<Task>& tasks);
+
 };
 
 #endif // TASK_H

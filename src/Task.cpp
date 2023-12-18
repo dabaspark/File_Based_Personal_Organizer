@@ -64,7 +64,6 @@ void TaskManager::listAndSortTasks() {
     std::cout << "2. Deadline\n";
     std::cout << "3. Creation Date\n";
     std::cout << "4. Priority\n";
-    //std::cout << "Enter your choice (1-4): ";
 
     // get the user input
     sortOption = getValidChoice(1, 4);
@@ -101,8 +100,8 @@ void TaskManager::listAndSortTasks() {
             break;
     }
 
-    // Display the sorted tasks
-    displayTasks();
+    // Display sorted tasks in detailed format
+    displayTasksDetailed(tasks);
 
     // Ask the user for confirmation
     char choice;
@@ -125,6 +124,7 @@ void TaskManager::listAndSortTasks() {
 
 void TaskManager::editTask() {
     string searchTitle;
+    displayTasksDetailed(tasks);
     cout << "Enter the title of the task you want to edit: ";
     // Clear the input buffer
     //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -217,6 +217,7 @@ void TaskManager::editTask() {
 
 void TaskManager::deleteTask() {
     string searchTitle;
+    displayTasksDetailed(tasks);
     cout << "Enter the title of the task you want to delete: ";
 
     //cin.ignore(); // Ignore the newline character left in the buffer
@@ -641,4 +642,34 @@ std::string TaskManager::trim(const std::string& str) {
     size_t start = str.find_first_not_of(" \t\r\n");
     size_t end = str.find_last_not_of(" \t\r\n");
     return (start != std::string::npos && end != std::string::npos) ? str.substr(start, end - start + 1) : "";
+}
+
+
+// utilitis for listAndSortTasks
+void TaskManager::displayTasksDetailed(const std::vector<Task>& tasks) {
+    // Clear the console
+    std::system("clear");
+
+    // Display the sorted tasks in a detailed format
+    const int columnWidth = 20;
+
+    std::cout << std::left << std::setw(columnWidth) << "Task Name";
+    std::cout << std::setw(columnWidth) << "Deadline";
+    std::cout << std::setw(columnWidth) << "Priority";
+    std::cout << std::setw(columnWidth) << "Completed";
+    std::cout << std::setw(columnWidth) << "Creation Date\n";
+    std::cout << std::string(5 * columnWidth, '-') << "\n";
+
+    for (const Task& task : tasks) {
+        // Truncate task title to fit column width
+        std::string truncatedTitle = task.title.substr(0, columnWidth - 3);
+        if (task.title.length() > columnWidth)
+            truncatedTitle += "...";
+
+        std::cout << std::setw(columnWidth) << truncatedTitle;
+        std::cout << std::setw(columnWidth) << task.deadline;
+        std::cout << std::setw(columnWidth) << task.priority;
+        std::cout << std::setw(columnWidth) << (task.completed ? "Yes" : "No");
+        std::cout << std::setw(columnWidth) << task.creationDate << "\n";
+    }
 }
