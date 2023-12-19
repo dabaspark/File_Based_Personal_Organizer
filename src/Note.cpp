@@ -297,7 +297,10 @@ void NoteManager::loadNotesFromFile() {
 
     // update the previous categories
     for (const Note& note : notes) {
-        previousCategories.push_back(note.category);
+        // make sure the category is not already in the previous categories
+        if (std::find(previousCategories.begin(), previousCategories.end(), note.category) == previousCategories.end()){
+            previousCategories.push_back(note.category);
+        }
     }
 
     file.close();
