@@ -2,8 +2,8 @@
 #include "include/Organizer.h"
 #include <iostream>
 
-Organizer::Organizer(const std::string& taskFilename, const std::string& appointmentFilename)
-    : taskManager(taskFilename), appointmentManager(appointmentFilename) {
+Organizer::Organizer(const std::string& taskFilename, const std::string& appointmentFilename, const std::string& noteFilename)
+    : taskManager(taskFilename), appointmentManager(appointmentFilename), noteManager(noteFilename) {
     // Constructor implementation
     unsavedChanges_organizer = false;
 }
@@ -13,6 +13,7 @@ Organizer::~Organizer() {
     // call destructor for taskManager and appointmentManager
     taskManager.~TaskManager();
     appointmentManager.~AppointmentManager();
+    noteManager.~NoteManager();
 }
 
 void Organizer::displayMainMenu() {
@@ -20,20 +21,23 @@ void Organizer::displayMainMenu() {
 
     do {
         print_menu_header("Main Menu", true); // Clear the console = true
-        unsavedChanges_organizer = taskManager.unsavedChanges || appointmentManager.unsavedChanges;
+        unsavedChanges_organizer = taskManager.unsavedChanges || appointmentManager.unsavedChanges || noteManager.unsavedChanges;
 
         std::cout << "Number of Tasks: " << taskManager.tasks.size() <<", "
             << "Number of Appointments: " << appointmentManager.appointments.size() << ", " 
+            << "Number of Notes: " << noteManager.notes.size() << "\n" 
             << "File Status: " << (unsavedChanges_organizer ? "\033[1;31mNew Changes Not Saved to the File!\033[0m" : "Up to Date") << "\n";
 
         std::cout << "====================\n";
         std::cout << "1. Task Menu\n";
         std::cout << "2. Appointment Menu\n";
-        std::cout << "3. Save Changes to File\n";
-        std::cout << "4. Save and Quit\n";
-        std::cout << "5. Quit without Saving\n";
+        std::cout << "3. Note Menu\n";
 
-        choice = getValidChoice(1, 5);
+        std::cout << "4. Save Changes to File\n";
+        std::cout << "5. Save and Quit\n";
+        std::cout << "6. Quit without Saving\n";
+
+        choice = getValidChoice(1, 6);
 
         switch (choice) {
             case 1:
@@ -43,6 +47,10 @@ void Organizer::displayMainMenu() {
                 appointmentManager.runWindow_Appointment();
                 break;
             case 3:
+                noteManager.runWindow_Note();
+                break;
+
+            case 4:
                 taskManager.saveTasksToFile();
                 appointmentManager.saveAppointmentsToFile();
                 taskManager.unsavedChanges = false;
@@ -50,7 +58,7 @@ void Organizer::displayMainMenu() {
                 unsavedChanges_organizer = false;
                 std::cout << "Changes Saved.\n";
                 break;
-            case 4:
+            case 5:
                 taskManager.saveTasksToFile();
                 appointmentManager.saveAppointmentsToFile();
                 taskManager.unsavedChanges = false;
@@ -58,7 +66,7 @@ void Organizer::displayMainMenu() {
                 unsavedChanges_organizer = false;
                 std::cout << "Changes Saved. Quitting...\n";
                 break;
-            case 5:
+            case 6:
                 if(unsavedChanges_organizer) {
                     std::cout << "Changes not saved. Are you sure you want to quit? (y/n): ";
                     char confirm;
@@ -76,9 +84,9 @@ void Organizer::displayMainMenu() {
                     std::cout << "Exiting program.\n";
                 }
             default:
-                std::cout << "Invalid choice. Please enter a number between 1 and 5.\n";
+                std::cout << "Invalid choice. Please enter a number between 1 and 6.\n";
         }
-    } while (choice != 4 && choice != 5);
+    } while (choice != 5 && choice != 6);
 }
 
 

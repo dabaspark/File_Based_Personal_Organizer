@@ -387,21 +387,26 @@ void AppointmentManager::searchAppointmentsByKeyword() const {
 
 
 void AppointmentManager::saveAppointmentsToFile() const {
-    ofstream file(appointment_filename);
+    std::ofstream file(appointment_filename);
 
-    for (const Appointment& appointment : appointments) {
-        file << appointment.title << "\n";
-        file << appointment.note << "\n";
-        file << appointment.date << "\n";
-        file << appointment.time << "\n";
-        file << appointment.creationDate<< "\n";
+    if (file.is_open()) {
+        for (const Appointment& appointment : appointments) {
+            file << appointment.title << "\n";
+            file << appointment.note << "\n";
+            file << appointment.date << "\n";
+            file << appointment.time << "\n";
+            file << appointment.creationDate<< "\n";
+        }
+        std::cout << "Appointments saved to the file.\n";
+    } else {
+        std::cout << "Error: Unable to save to the file.\n";
     }
 
     file.close();
 }
 
 void AppointmentManager::loadAppointmentsFromFile() {
-    ifstream file(appointment_filename);
+    std::ifstream file(appointment_filename);
 
     if (!file) {
         cout << "File not found. Starting with an empty Appointment list.\n";

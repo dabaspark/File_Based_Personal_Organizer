@@ -11,7 +11,6 @@ TaskManager::TaskManager(const std::string& filename) : task_filename(filename) 
 
 // Destructor
 TaskManager::~TaskManager() {
-    //saveTasksToFile();
     // Clear the console
     std::system("clear");
 }
@@ -170,9 +169,6 @@ void TaskManager::editTask() {
     // Get the title of the task to be edited
     std::cout << "---------------------------------------------\n";
     cout << "Enter the title of the task you want to edit: ";
-    // Clear the input buffer
-    //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    //std::cin.ignore();
     getline(cin, searchTitle);
     
     // Trim whitespaces from the input title
@@ -237,7 +233,6 @@ void TaskManager::editTask() {
         if (tolower(saveChoice) == 'y') {
             // If the user chooses to save, update the original task
             *it = editedTask;
-            //saveTasksToFile();  // Save changes immediately
             cout << "Changes saved!\n";
             unsavedChanges = true;
         } else {
@@ -267,8 +262,6 @@ void TaskManager::deleteTask() {
     std::cout << "---------------------------------------------\n";
     cout << "Enter the title of the task you want to delete: ";
 
-    //cin.ignore(); // Ignore the newline character left in the buffer
-    
     getline(cin, searchTitle);
 
     auto it = find_if(tasks.begin(), tasks.end(), [&searchTitle](const Task& task) {
@@ -350,7 +343,6 @@ void TaskManager::searchTasksByKeyword() const {
     print_menu_header("Main Menu >> Tasks Menu >> Search Tasks By Keyword", true);
 
     cout << "Enter the keyword of the task you want to search for: ";
-    //cin.ignore(); // Ignore the newline character left in the buffer
     getline(cin, keyword);
 
     // Remove leading and trailing spaces from the user-entered keyword
@@ -376,7 +368,7 @@ void TaskManager::searchTasksByKeyword() const {
             return !std::isspace(c);
         }).base();
 
-        string trimmedTitle = std::string(titleBegin, titleEnd);
+        std::string trimmedTitle = std::string(titleBegin, titleEnd);
 
         // Compare with the user-entered keyword (ignoring case)
         if (std::search(trimmedTitle.begin(), trimmedTitle.end(), keyword.begin(), keyword.end(),
@@ -400,22 +392,27 @@ void TaskManager::searchTasksByKeyword() const {
 
 
 void TaskManager::saveTasksToFile() const {
-    ofstream file(task_filename);
+    std::ofstream file(task_filename);
 
-    for (const Task& task : tasks) {
-        file << task.title << "\n";
-        file << task.description << "\n";
-        file << task.deadline << "\n";
-        file << task.priority << "\n";
-        file << task.completed << "\n";
-        file << task.creationDate<< "\n";
+    if (file.is_open()) {
+        for (const Task& task : tasks) {
+            file << task.title << "\n";
+            file << task.description << "\n";
+            file << task.deadline << "\n";
+            file << task.priority << "\n";
+            file << task.completed << "\n";
+            file << task.creationDate<< "\n";
+        }
+        std::cout << "Tasks saved to file.\n";
+    } else {
+        cout << "Error: Unable to save tasks to file.\n";
     }
 
     file.close();
 }
 
 void TaskManager::loadTasksFromFile() {
-    ifstream file(task_filename);
+    std::ifstream file(task_filename);
 
     if (!file) {
         cout << "File not found. Starting with an empty task list.\n";
@@ -508,7 +505,6 @@ void TaskManager::runWindow_Task() {
 string TaskManager::enterTaskTitle() const {
     std::cout << "Enter task title: ";
     std::string title;
-    //std::cin.ignore();
     std::getline(std::cin, title);
     
     // check if the title is empty
