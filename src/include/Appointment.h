@@ -17,7 +17,8 @@
 #include <limits>  // for limiting user input in display menu (error handling)
 #include <thread> // for std::this_thread::sleep_for
 #include <chrono> // for std::chrono::seconds
-
+#include <iomanip>
+#include <map>
 #include "Utilities.h"
 
 using namespace std;
@@ -92,6 +93,9 @@ private:
     bool isValidMonthFormat(const std::string& month) const;
     void displayUpcomingAppointmentsDetailed(const std::vector<Appointment>& appointments, const std::string& type) const;
     std::vector<Appointment> sortAppointmentsByDate(const std::vector<Appointment>& appointments);
+    void displayDailyAppointments(const std::vector<Appointment>& appointments) const;
+    void displayWeeklyAppointments(const std::vector<Appointment>& appointments) const;
+    void displayMonthlyAppointments(const std::vector<Appointment>& appointments) const;
 };
 
 #endif // APPOINTMENT_H

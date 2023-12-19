@@ -55,7 +55,7 @@ Opportunity for students to provide feedback and seek clarification on course to
 Wed Dec 27 11:30:22 2023
 Second Appointment
 Note 2
-2024-1-5
+2024-01-05
 22:00
 Tue Dec 19 11:40:56 2023
 Advanced C++ Features Workshop
@@ -88,3 +88,138 @@ Practical session on improving code quality through refactoring in C++.
 2024-01-31
 16:45
 Tue Jan 2 09:18:02 2024
+Object-Oriented Basics Lecture
+Introduction to key concepts and principles of object-oriented programming in C++.
+2023-12-19
+16:30
+Mon Dec 18 22:28:15 2023
+C++ Project Kick-off Meeting
+Discussion and planning for the semester-long C++ programming project.
+2023-12-20
+14:00
+Tue Dec 19 11:40:56 2023
+Code Review Session
+Peer code review to enhance coding skills and reinforce best practices.
+2023-12-21
+09:30
+Wed Dec 20 08:15:30 2023
+Guest Lecture on C++ Design Patterns
+Special lecture by Professor Jingwei Li covering essential design patterns in C++.
+2023-12-22
+15:45
+Thu Dec 21 16:22:10 2023
+Midterm Exam Preparation Workshop
+Guidance and tips for preparing for the midterm exam in the C++ course.
+2023-12-23
+13:00
+Fri Dec 22 10:55:45 2023
+Object-Oriented Design Lab
+Hands-on lab session focusing on designing and implementing object-oriented solutions.
+2023-12-24
+11:15
+Sat Dec 23 19:37:28 2023
+C++ Project Progress Review
+Check-in meeting to review and discuss the progress of the semester-long C++ projects.
+2023-12-25
+18:00
+Sun Dec 24 14:09:02 2023
+Guest Speaker: Industry Applications of C++
+Insights from a guest speaker on real-world applications of C++ in the industry.
+2023-12-26
+10:45
+Mon Dec 25 09:18:40 2023
+Final Exam Review Session
+Comprehensive review session to prepare for the final exam in the C++ course.
+2023-12-27
+19:30
+Tue Dec 26 20:05:14 2023
+Course Feedback and Q&A Session
+Opportunity for students to provide feedback and seek clarification on course topics.
+2023-12-28
+14:30
+Wed Dec 27 11:30:22 2023
+Advanced C++ Features Workshop
+In-depth exploration of advanced features in C++ programming, such as templates and lambda expressions.
+2023-12-29
+14:30
+Thu Dec 28 08:45:20 2023
+Object-Oriented Analysis Session
+Practical session on applying object-oriented analysis techniques to real-world problems.
+2023-12-30
+09:45
+Fri Dec 29 15:20:35 2023
+Guest Lecture: C++ and Game Development
+Special lecture by a guest speaker on the role of C++ in game development.
+2023-12-31
+17:00
+Sat Dec 30 12:10:12 2023
+Team Collaboration Workshop
+Interactive workshop on effective collaboration in C++ project teams.
+2024-01-01
+11:00
+Sun Dec 31 19:55:28 2023
+C++ Debugging Techniques Lab
+Hands-on lab session focused on debugging strategies and tools in C++.
+2024-01-02
+10:15
+Mon Jan 1 14:30:45 2024
+Object-Oriented Code Refactoring
+Practical session on improving code quality through refactoring in C++.
+2024-01-03
+16:45
+Tue Jan 2 09:18:02 2024
+In-Depth C++ Topics Discussion
+Discussion session covering advanced and in-depth topics in C++ programming.
+2024-01-04
+14:30
+Wed Jan 3 18:55:30 2024
+Hands-On C++ Coding Challenge
+Engage in a coding challenge to apply and reinforce C++ programming concepts.
+2024-01-05
+09:45
+Thu Jan 4 14:20:15 2024
+C++ Project Showcase
+Opportunity for students to showcase their semester-long C++ projects.
+2024-01-06
+15:00
+Fri Jan 5 11:35:40 2024
+Object-Oriented Modeling Workshop
+Practical workshop on creating effective object-oriented models in C++.
+2024-01-07
+17:30
+Sat Jan 6 09:10:22 2024
+C++ Quiz Competition
+Friendly competition testing knowledge of C++ concepts and syntax.
+2024-01-08
+13:45
+Sun Jan 7 20:45:18 2024
+C++ Industry Panel Discussion
+Panel discussion featuring professionals discussing the industry use of C++.
+2024-01-09
+11:00
+Mon Jan 8 16:30:55 2024
+Advanced C++ Libraries Tutorial
+Explore advanced C++ libraries and their applications in real-world projects.
+2024-01-10
+10:30
+Tue Jan 9 12:15:40 2024
+C++ Code Optimization Techniques
+Learn strategies for optimizing C++ code for performance.
+2024-01-11
+16:00
+Wed Jan 10 14:20:22 2024
+Object-Oriented Testing Practices
+Understand best practices for testing object-oriented C++ code.
+2024-01-12
+12:30
+Thu Jan 11 18:10:35 2024
+C++ Final Exam Preparation Session
+Final session to review key concepts and prepare for the upcoming final exam.
+2024-01-13
+09:00
+Fri Jan 12 09:35:40 2024
+Final Exam for C++ Course
+Sit for the final exam to demonstrate understanding and mastery of C++ concepts.
+2024-01-14
+14:00
+Sat Jan 13 11:45:55 2024
