@@ -290,11 +290,14 @@ void NoteManager::loadNotesFromFile() {
     while (getline(file, note.title)) {
         getline(file, note.category);
         getline(file, note.content);
-        file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the newline character left in the buffer
-
         getline(file, note.creationDate);
 
         notes.push_back(note);
+    }
+
+    // update the previous categories
+    for (const Note& note : notes) {
+        previousCategories.push_back(note.category);
     }
 
     file.close();
@@ -390,28 +393,38 @@ std::string NoteManager::enterNoteTitle() const {
 
 // Utility function to enter note category
 std::string NoteManager::enterNoteCategory() {
-    std::cout << "Enter note category (or choose from previous categories):\n";
+    std::cout << "Choose a note category or enter 0 to add a new category:\n";
 
-    // Display previous categories
-    for (const std::string& previousCategory : previousCategories) {
-        std::cout << "- " << previousCategory << "\n";
+    // Display previous categories with numbers
+    for (size_t i = 0; i < previousCategories.size(); ++i) {
+        std::cout << i + 1 << ". " << previousCategories[i] << "\n";
     }
 
-    std::cout << "Enter category: ";
-    std::string category;
-    //std::cin.ignore();
-    std::getline(std::cin, category);
+    std::cout << "Enter your choice: ";
+    size_t choice = static_cast<size_t>(getValidChoice(0, previousCategories.size()));
     
-    // Check if the category is empty or consists of spaces only
-    while (category.empty() || std::all_of(category.begin(), category.end(), [](char c) { return std::isspace(c); })) {
-        std::cout << "Category cannot be empty or consist of spaces only. Please enter a valid category: ";
-        std::getline(std::cin, category);
+    if (choice >= 1 && choice <= previousCategories.size()) {
+        // User chose an existing category
+        return previousCategories[choice - 1];
+    } else if (choice == 0) {
+        // User wants to add a new category
+        std::cout << "Enter a new category: ";
+        std::string newCategory;
+        std::getline(std::cin, newCategory);
+
+        // Check if the new category is empty or consists of spaces only
+        while (newCategory.empty() || std::all_of(newCategory.begin(), newCategory.end(), [](char c) { return std::isspace(c); })) {
+            std::cout << "Category cannot be empty or consist of spaces only. Please enter a valid category: ";
+            std::getline(std::cin, newCategory);
+        }
+
+        // Add the new category to the set of previous categories
+        previousCategories.push_back(newCategory);
+        return newCategory;
+    } else {
+        // Invalid choice, return an empty category
+        return "";
     }
-
-    // Add the new category to the set of previous categories
-    previousCategories.push_back(category);
-
-    return category;
 }
 
 std::string NoteManager::enterNoteContent() const {
@@ -444,15 +457,24 @@ void NoteManager::displayNotesDetailed(const std::vector<Note>& notes, bool clea
         if (note.title.length() > columnWidth)
             truncatedTitle += "...";
 
+        // Truncate note category to fit column width
+        std::string truncatedCategory = note.category.substr(0, columnWidth - 3);
+        if (note.category.length() > columnWidth)
+            truncatedCategory += "...";
+
         // Truncate note content to fit column width
         std::string truncatedContent = note.content.substr(0, columnWidth - 3);
         if (note.content.length() > columnWidth)
             truncatedContent += "...";
 
+        // Truncate creation date to fit column width
+        std::string truncatedCreationDate = note.creationDate.substr(0, columnWidth);
+        if (note.creationDate.length() > columnWidth)
+            truncatedCreationDate = "..." + note.creationDate.substr(note.creationDate.length() - columnWidth + 3);
+
         std::cout << std::setw(columnWidth) << truncatedTitle;
-        std::cout << std::setw(columnWidth) << note.category;
+        std::cout << std::setw(columnWidth) << truncatedCategory;
         std::cout << std::setw(columnWidth) << truncatedContent;
-        std::cout << std::setw(columnWidth) << note.creationDate << "\n";
+        std::cout << std::setw(columnWidth) << truncatedCreationDate << "\n";
     }
 }
-
