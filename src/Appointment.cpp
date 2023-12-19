@@ -745,28 +745,24 @@ void AppointmentManager::displayDailyAppointments(const std::vector<Appointment>
 }
 
 void AppointmentManager::displayWeeklyAppointments(const std::vector<Appointment>& appointments) const {
-
-    std::map<std::string, std::vector<Appointment>> weeklyAppointments;
-    for (const auto& appointment : appointments) {
-        weeklyAppointments[getDayOfWeek(appointment.date)].push_back(appointment);
+    if (appointments.empty()) {
+        std::cout << "No appointments to display.\n";
+        return;
     }
 
-    // Display appointments for each day of the week
-    for (const auto& dayAppointments : weeklyAppointments) {
-        std::cout << dayAppointments.first << " - " << dayAppointments.second[0].date << ":\n";
+    std::string currentDay = getDayOfWeek(appointments[0].date);
+    std::cout << currentDay << " - " << appointments[0].date << ":\n";
 
-        if (dayAppointments.second.empty()) {
-            std::cout << "No Appointments\n\n";
-        } else {
-            int appointmentCount = 0;
-            for (const auto& appointment : dayAppointments.second) {
-                std::cout << appointmentCount + 1 << ". " << appointment.title << " - " << appointment.time << "\n";
-                std::cout << "   Date: " << appointment.date << "\n";
-                std::cout << "   Notes: " << appointment.note << "\n\n";
+    for (size_t i = 0; i < appointments.size(); ++i) {
+        std::string appointmentDay = getDayOfWeek(appointments[i].date);
 
-                ++appointmentCount;
-            }
+        if (appointmentDay != currentDay) {
+            std::cout << "\n" << appointmentDay << " - " << appointments[i].date << ":\n";
+            currentDay = appointmentDay;
         }
+
+        std::cout << i + 1 << ". " << appointments[i].title << " - " << appointments[i].time << "\n";
+        std::cout << "   Notes: " << appointments[i].note << "\n";
     }
 }
 
