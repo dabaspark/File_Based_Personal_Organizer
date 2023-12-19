@@ -54,6 +54,9 @@ public:
     // Function to run the note management window
     void runWindow_Note();
 
+    // Function to display notes by category
+    void displayNotesByCategory() const;
+
 
 private:
     std::string note_filename;

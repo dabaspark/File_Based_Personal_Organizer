@@ -306,25 +306,60 @@ void NoteManager::loadNotesFromFile() {
     file.close();
 }
 
+void NoteManager::displayNotesByCategory() const {
+    // Display a list of available categories
+    std::cout << "Available Categories:\n";
+    for (size_t i = 0; i < previousCategories.size(); ++i) {
+        std::cout << i + 1 << ". " << previousCategories[i] << "\n";
+    }
+
+    // Ask the user to choose a category
+    std::cout << "Choose a category to display notes (enter 0 for all categories): ";
+    size_t choice = static_cast<size_t>(getValidChoice(0, previousCategories.size()));
+
+    // Display notes based on the chosen category
+    std::cout << "Notes in ";
+    if (choice == 0) {
+        std::cout << "all categories:\n";
+    } else {
+        std::cout << previousCategories[choice - 1] << " category:\n";
+    }
+
+    for (const Note& note : notes) {
+        // Display notes that match the chosen category
+        if (choice == 0 || note.category == previousCategories[choice - 1]) {
+            std::cout << "Title: " << note.title << "\n";
+            std::cout << "Category: " << note.category << "\n";
+            std::cout << "Content: " << note.content << "\n";
+            std::cout << "Creation Date: " << note.creationDate << "\n";
+            std::cout << "-----------------\n";
+        }
+    }
+
+    print_menu_tail("Notes Menu", true);
+}
+
+
 void NoteManager::runWindow_Note() {
     int choice;
 
     do {
         print_menu_header("Main Menu >> Notes Menu", true);
 
-        std::cout << "Number of Notes: " << notes.size() <<", "
-            << "File Status: " << (unsavedChanges ? "\033[1;31mNew Changes Not Saved to the File!\033[0m" : "Up to Date") << "\n";
+        std::cout << "Number of Notes: " << notes.size() << ", "
+                  << "File Status: " << (unsavedChanges ? "\033[1;31mNew Changes Not Saved to the File!\033[0m" : "Up to Date") << "\n";
 
         std::cout << "====================\n";
         std::cout << "1. Add a Note\n";
         std::cout << "2. Display Notes\n";
-        std::cout << "3. Edit Notes\n";
-        std::cout << "4. Delete Notes\n";
-        std::cout << "5. Search Notes by Keyword\n";
-        std::cout << "6. Save Current Changes to the File\n";
-        std::cout << "7. Go Back to Main Menu\n";
+        std::cout << "3. Display Notes by Category\n";  // Added option
+        std::cout << "4. Edit Notes\n";
+        std::cout << "5. Delete Notes\n";
+        std::cout << "6. Search Notes by Keyword\n";
+        std::cout << "7. Save Current Changes to the File\n";
+        std::cout << "8. Go Back to Main Menu\n";
 
-        choice = getValidChoice(1, 7);
+        choice = getValidChoice(1, 8);
 
         switch (choice) {
             case 1:
@@ -334,26 +369,29 @@ void NoteManager::runWindow_Note() {
                 displayNotes();
                 break;
             case 3:
-                editNote();
+                displayNotesByCategory();  // Added option
                 break;
             case 4:
-                deleteNote();
+                editNote();
                 break;
             case 5:
-                searchNotesByKeyword();
-                break; 
+                deleteNote();
+                break;
             case 6:
+                searchNotesByKeyword();
+                break;
+            case 7:
                 saveNotesToFile();
                 std::cout << "Tasks saved. \n";
                 unsavedChanges = false;
                 break;
-            case 7:
+            case 8:
                 std::cout << "Going to the Main Menu.\n";
                 break;
             default:
                 break;
         }
-    } while (choice != 7);
+    } while (choice != 8);
 
     print_menu_tail("Main Menu", false);
 }
