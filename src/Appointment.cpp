@@ -82,6 +82,46 @@ void AppointmentManager::displayAppointments(){
     print_menu_tail("Appointments Menu", true); // Clear the console
 }
 
+void AppointmentManager::displayUpcomingAppointments() {
+    print_menu_header("Main Menu >> Appointments Menu >> View Upcoming Appointments in Daily/weekly/monthly Format", true); // Clear the console
+
+    // Display options for viewing upcoming appointments
+    std::cout << "View upcoming appointments in:\n";
+    std::cout << "1. Daily Format\n";
+    std::cout << "2. Weekly Format\n";
+    std::cout << "3. Monthly Format\n";
+
+    // Get the user input
+    int viewOption = getValidChoice(1, 3);
+
+    switch (viewOption) {
+        case 1: {
+            std::cout << "Enter the date of the day you want to view.\n";
+            std::string date = enterAppointmentDate();
+            displayAppointmentsDaily(date);
+            break;
+        }
+        case 2: {
+            std::cout << "Enter the start date of the week you want to view.\n";
+            std::string week = enterAppointmentDate(); // Assuming user inputs the start date of the week
+            displayAppointmentsWeekly(week);
+            break;
+        }
+        case 3: {
+            std::cout << "Enter the month you want to view (YYYY-MM).\n";
+            std::string month = enterMonth(); 
+            displayAppointmentsMonthly(month);
+            break;
+        }
+        default:
+            std::cout << "Invalid choice. Please enter a number between 1 and 3.\n"; // just in case, it will never comes here because of getValidChoice
+    }
+
+    print_menu_tail("Appointments Menu", true); // Clear the console
+}
+
+
+
 void AppointmentManager::listAndSortAppointments() {
     int sortOption;
 
@@ -535,3 +575,128 @@ void AppointmentManager::displayAppointmentsDetailed(const std::vector<Appointme
         std::cout << std::setw(columnWidth) << appointment.creationDate << "\n";
     }
 }
+
+
+// utilitis for displayUpcomingAppointments
+std::string AppointmentManager::enterMonth() const {
+    std::cout << "Enter month (YYYY-MM): ";
+    std::string month;
+    do {
+        std::getline(std::cin, month);
+        if (month.empty()) {
+            std::cout << "Error: Month cannot be empty. Please enter a valid month (YYYY-MM): ";
+        } else if (!isValidMonthFormat(month)) {
+            std::cout << "Error: Invalid month format. Please enter a valid month (YYYY-MM): ";
+        }
+    } while (month.empty() || !isValidMonthFormat(month));
+    return month;
+}
+
+bool AppointmentManager::isValidMonthFormat(const std::string& month) const {
+    std::tm monthDate = {};
+    std::istringstream ss(month);
+
+    // Parse the month components manually
+    if (ss >> std::get_time(&monthDate, "%Y-%m")) {
+        // Check if the extracted month components are valid
+        return isValidDate(monthDate.tm_year + 1900, monthDate.tm_mon + 1, 1);
+    }
+
+    return false; // Invalid month format, handled separately
+}
+
+
+void AppointmentManager::displayAppointmentsDaily(const std::string& date) const {
+    // Filter appointments for the specified date
+    std::vector<Appointment> dailyAppointments;
+    std::copy_if(appointments.begin(), appointments.end(), std::back_inserter(dailyAppointments),
+                 [&date](const Appointment& app) { return app.date == date; });
+
+    // Display the appointments for the day
+    displayUpcomingAppointmentsDetailed(dailyAppointments, "daily");
+}
+
+void AppointmentManager::displayAppointmentsWeekly(const std::string& startDate) const {
+    // Assuming a week has 7 days for simplicity
+    const int daysInWeek = 7;
+
+    // Convert the start date to a time point
+    std::tm tmDate = convertStringToTm(startDate, "%Y-%m-%d");
+    std::chrono::system_clock::time_point startDateTime = std::chrono::system_clock::from_time_t(std::mktime(&tmDate));
+
+    // Calculate the end date as one week from the start date
+    std::chrono::system_clock::time_point endDateTime = startDateTime + std::chrono::hours(daysInWeek * 24);
+
+    // Filter appointments for the specified week
+    std::vector<Appointment> weeklyAppointments;
+    std::copy_if(appointments.begin(), appointments.end(), std::back_inserter(weeklyAppointments),
+                 [&startDateTime, &endDateTime](const Appointment& app) {
+                     std::chrono::system_clock::time_point appDateTime =
+                         convertStringToTimePoint(app.date + " " + app.time, "%Y-%m-%d %H:%M");
+                     return appDateTime >= startDateTime && appDateTime < endDateTime;
+                 });
+
+    // Display the appointments for the week
+    displayUpcomingAppointmentsDetailed(weeklyAppointments, "weekly");
+}
+
+void AppointmentManager::displayAppointmentsMonthly(const std::string& month) const {
+    // Filter appointments for the specified month
+    std::vector<Appointment> monthlyAppointments;
+    std::copy_if(appointments.begin(), appointments.end(), std::back_inserter(monthlyAppointments),
+                 [&month](const Appointment& app) { return app.date.substr(0, 7) == month; });
+
+    // Display the appointments for the month
+    displayUpcomingAppointmentsDetailed(monthlyAppointments, "monthly");
+}
+
+// displayUpcomingAppointmentsDetailed in this style
+// Daily Appointments - Date: 2023-12-15
+// Weekly Appointments - Week of 2023-12-11 to 2023-12-17
+// Monthly Appointments - December 2023
+
+// 1. Meeting with Client - 10:00 AM
+//    Notes: Discuss project updates and deliverables.
+
+// 2. Lunch with Colleague - 12:30 PM
+//    Notes: Informal catch-up and team bonding.
+
+// etc.
+
+void AppointmentManager::displayUpcomingAppointmentsDetailed(const std::vector<Appointment>& appointments, const std::string& type) const {
+    // Check if there are any appointments
+    if (appointments.empty()) {
+        std::cout << "No upcoming appointments.\n";
+        return;
+    }
+
+    // Display header based on the type (daily, weekly, monthly)
+    std::string header;
+    if (type == "daily") {
+        header = "Daily Appointments - Date: " + appointments[0].date;
+    } else if (type == "weekly") {
+        header = "Weekly Appointments - Week of " + appointments[0].date + " to " + appointments.back().date;
+    } else if (type == "monthly") {
+        header = "Monthly Appointments - " + appointments[0].date.substr(0, 7);
+    }
+
+    std::cout << header << "\n\n";
+
+    // Display each appointment
+    for (size_t i = 0; i < appointments.size(); ++i) {
+        const Appointment& app = appointments[i];
+
+        // Display day for weekly appointments
+        if (type == "weekly" && i == 0) {
+            std::string dayOfWeek = getDayOfWeek(app.date);
+            std::cout << dayOfWeek << ":\n";
+        }
+
+        // Display each appointment's details
+        std::cout << i + 1 << ". " << app.title << " - " << app.time << "\n";
+        std::cout << "   Notes: " << app.note << "\n\n";
+    }
+}
+
+
+

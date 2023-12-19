@@ -4,6 +4,10 @@
 #include <iomanip>
 #include <chrono> // Include the necessary header file for std::chrono library
 #include <regex> // Include the necessary header file for std::regex
+#include <ctime>
+#include <string>
+#include <sstream>
+#include <iostream>
 
 int getValidChoice(int min, int max) {
     int choice;
@@ -104,3 +108,51 @@ std::string trim(const std::string& str) {
     size_t end = str.find_last_not_of(" \t\r\n");
     return (start != std::string::npos && end != std::string::npos) ? str.substr(start, end - start + 1) : "";
 }
+
+
+std::string getDayOfWeek(const std::string& dateStr) {
+    // Convert the input string to a time structure
+    struct std::tm timeinfo = {};
+    std::istringstream ss(dateStr);
+    ss >> std::get_time(&timeinfo, "%Y-%m-%d");
+
+    if (ss.fail()) {
+        // Failed to parse the date string
+        return "Invalid Date";
+    }
+
+    // Get the day of the week as an integer (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+    int dayOfWeek = timeinfo.tm_wday;
+
+    // Define an array of day names
+    const char* dayNames[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+    // Return the corresponding day name
+    return dayNames[dayOfWeek];
+}
+
+
+std::tm convertStringToTm(const std::string& dateStr, const std::string& format) {
+    std::tm tmDate = {};
+    std::istringstream ss(dateStr);
+    ss >> std::get_time(&tmDate, format.c_str());
+    if (ss.fail()) {
+        // Handle parsing failure, e.g., invalid date string
+        throw std::runtime_error("Failed to parse date string");
+    }
+    return tmDate;
+}
+
+std::chrono::system_clock::time_point convertStringToTimePoint(const std::string& dateTimeStr, const std::string& format) {
+    std::tm tmDateTime = {};
+    std::istringstream ss(dateTimeStr);
+    ss >> std::get_time(&tmDateTime, format.c_str());
+    if (ss.fail()) {
+        // Handle parsing failure, e.g., invalid date/time string
+        throw std::runtime_error("Failed to parse date/time string");
+    }
+
+    // Convert std::tm to std::chrono::system_clock::time_point
+    return std::chrono::system_clock::from_time_t(std::mktime(&tmDateTime));
+}
+

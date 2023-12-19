@@ -48,6 +48,9 @@ public:
     // Function to display all Appointment
     void displayAppointments();
 
+    // Function to show upcoming Appointment in daily, weekly, monthly format
+    void displayUpcomingAppointments();
+
     // Function to edit an Appointment
     void editAppointment();
 
@@ -80,6 +83,14 @@ private:
 
     // utilitis for listAndSortAppointments
     void displayAppointmentsDetailed(const std::vector<Appointment>& appointments, bool clearScreen);
+
+    // Utility functions for displayUpcomingAppointments
+    void displayAppointmentsDaily(const std::string& date) const;
+    void displayAppointmentsWeekly(const std::string& date) const;
+    void displayAppointmentsMonthly(const std::string& date) const;
+    std::string enterMonth() const;
+    bool isValidMonthFormat(const std::string& month) const;
+    void displayUpcomingAppointmentsDetailed(const std::vector<Appointment>& appointments, const std::string& type) const;
 };
 
 #endif // APPOINTMENT_H

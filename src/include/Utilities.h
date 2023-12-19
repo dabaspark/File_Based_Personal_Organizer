@@ -6,6 +6,8 @@
 #include <string>
 #include <sstream>
 #include <limits>
+#include <chrono> 
+#include <ctime>  
 
 
 // Function to validate and get user input as an integer within a specified range
@@ -26,5 +28,12 @@ void print_menu_tail(const std::string& go_back_to, bool clear_screen = true);
 
 // utilitis function for enterString function
 std::string trim(const std::string& str);
+
+
+std::string getDayOfWeek(const std::string& date);
+
+std::tm convertStringToTm(const std::string& dateStr, const std::string& format);
+std::chrono::system_clock::time_point convertStringToTimePoint(const std::string& dateTimeStr, const std::string& format);
+
 
 #endif // UTILITIES_H
