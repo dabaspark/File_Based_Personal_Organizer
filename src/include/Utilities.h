@@ -35,5 +35,6 @@ std::string getDayOfWeek(const std::string& date);
 std::tm convertStringToTm(const std::string& dateStr, const std::string& format);
 std::chrono::system_clock::time_point convertStringToTimePoint(const std::string& dateTimeStr, const std::string& format);
 
+std::string convertTmToString(const std::tm& timeStruct, const std::string& format);
 
 #endif // UTILITIES_H

@@ -28,7 +28,7 @@ void AppointmentManager::addAppointment() {
 
     newAppointment.title = enterAppointmentTitle();
     newAppointment.note = enterAppointmentNote();
-    newAppointment.date = enterAppointmentDate();
+    newAppointment.date = enterAppointmentDate(false);
     newAppointment.time = enterAppointmentTime();
 
     // Get the current date and time
@@ -94,16 +94,19 @@ void AppointmentManager::displayUpcomingAppointments() {
     // Get the user input
     int viewOption = getValidChoice(1, 3);
 
+    // sort appointments by date before showing
+    appointments = sortAppointmentsByDate(appointments);
+
     switch (viewOption) {
         case 1: {
             std::cout << "Enter the date of the day you want to view.\n";
-            std::string date = enterAppointmentDate();
+            std::string date = enterAppointmentDate(true);
             displayAppointmentsDaily(date);
             break;
         }
         case 2: {
             std::cout << "Enter the start date of the week you want to view.\n";
-            std::string week = enterAppointmentDate(); // Assuming user inputs the start date of the week
+            std::string week = enterAppointmentDate(true); // Assuming user inputs the start date of the week
             displayAppointmentsWeekly(week);
             break;
         }
@@ -152,9 +155,7 @@ void AppointmentManager::listAndSortAppointments() {
             });
             break;
         case 2:
-            std::sort(appointments.begin(), appointments.end(), [](const Appointment& a, const Appointment& b) {
-                return a.date < b.date;
-            });
+            appointments = sortAppointmentsByDate(appointments);
             break;
         case 3:
             std::sort(appointments.begin(), appointments.end(), [](const Appointment& a, const Appointment& b) {
@@ -235,7 +236,7 @@ void AppointmentManager::editAppointment() {
                 editedAppointment.note = enterAppointmentNote();
                 break;
             case 3:
-                editedAppointment.date = enterAppointmentDate();
+                editedAppointment.date = enterAppointmentDate(false);
                 break;
             case 4:
                 editedAppointment.time = enterAppointmentTime();
@@ -244,7 +245,7 @@ void AppointmentManager::editAppointment() {
                 // If the user chooses to edit all fields, update all fields
                 editedAppointment.title = enterAppointmentTitle();
                 editedAppointment.note = enterAppointmentNote();
-                editedAppointment.date = enterAppointmentDate();
+                editedAppointment.date = enterAppointmentDate(false);
                 editedAppointment.time = enterAppointmentTime();
                 break;
         }
@@ -521,7 +522,7 @@ string AppointmentManager::enterAppointmentNote() const {
 }
 
 
-std::string AppointmentManager::enterAppointmentDate() const {
+std::string AppointmentManager::enterAppointmentDate(bool accept_past) const {
     std::cout << "Enter appointment date (YYYY-MM-DD): ";
     std::string date;
     do {
@@ -530,10 +531,11 @@ std::string AppointmentManager::enterAppointmentDate() const {
             std::cout << "Error: date cannot be empty. Please enter a valid date (YYYY-MM-DD): ";
         } else if (!isValidDateFormat(date)) {
             std::cout << "Error: Invalid date format. Please enter a valid date (YYYY-MM-DD): ";
-        } else if (isPast(date)) {
+        } else if (isPast(date) && !accept_past) {
             std::cout << "Error: Appointment Date cannot be in the past. Please enter a future date: ";
         }
-    } while (date.empty() || !isValidDateFormat(date) || isPast(date));
+
+    } while (date.empty() || !isValidDateFormat(date) || (isPast(date) && !accept_past) );
     return date;
 }
 
@@ -680,7 +682,7 @@ void AppointmentManager::displayUpcomingAppointmentsDetailed(const std::vector<A
     if (type == "daily") {
         header = "Daily Appointments - Date: " + appointments[0].date;
     } else if (type == "weekly") {
-        header = "Weekly Appointments - Week of " + appointments[0].date + " to " + appointments.back().date;
+        header = "Weekly Appointments - Week from " + appointments[0].date + " to " + appointments.back().date;
     } else if (type == "monthly") {
         header = "Monthly Appointments - " + appointments[0].date.substr(0, 7);
     }
@@ -705,4 +707,20 @@ void AppointmentManager::displayUpcomingAppointmentsDetailed(const std::vector<A
 }
 
 
+// function sortAppointmentsByDate
+std::vector<Appointment> AppointmentManager::sortAppointmentsByDate(const std::vector<Appointment>& appointments) {
+    // Make a copy of the original appointments vector
+    std::vector<Appointment> sortedAppointments = appointments;
 
+    // Sort the appointments by date
+    std::sort(sortedAppointments.begin(), sortedAppointments.end(), [](const Appointment& a, const Appointment& b) {
+        // Convert the date and time strings to time points
+        std::chrono::system_clock::time_point dateTimeA = convertStringToTimePoint(a.date + " " + a.time, "%Y-%m-%d %H:%M");
+        std::chrono::system_clock::time_point dateTimeB = convertStringToTimePoint(b.date + " " + b.time, "%Y-%m-%d %H:%M");
+
+        // Compare the time points
+        return dateTimeA < dateTimeB;
+    });
+
+    return sortedAppointments;
+}

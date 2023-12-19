@@ -80,6 +80,7 @@ private:
 
     // utilitis for listAndSortTasks
     void displayTasksDetailed(const std::vector<Task>& tasks, bool clearScreen);
+    std::vector<Task> sortTasksByDate(const std::vector<Task>& tasks);
 };
 
 #endif // TASK_H

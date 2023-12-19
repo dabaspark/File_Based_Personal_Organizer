@@ -58,3 +58,33 @@ Note 2
 2024-1-5
 22:00
 Tue Dec 19 11:40:56 2023
+Advanced C++ Features Workshop
+In-depth exploration of advanced features in C++ programming, such as templates and lambda expressions.
+2024-01-08
+14:30
+Thu Dec 28 08:45:20 2023
+Object-Oriented Analysis Session
+Practical session on applying object-oriented analysis techniques to real-world problems.
+2024-01-12
+09:45
+Fri Dec 29 15:20:35 2023
+Guest Lecture: C++ and Game Development
+Special lecture by a guest speaker on the role of C++ in game development.
+2024-01-18
+17:00
+Sat Dec 30 12:10:12 2023
+Team Collaboration Workshop
+Interactive workshop on effective collaboration in C++ project teams.
+2024-01-22
+11:00
+Sun Dec 31 19:55:28 2023
+C++ Debugging Techniques Lab
+Hands-on lab session focused on debugging strategies and tools in C++.
+2024-01-28
+10:15
+Mon Jan 1 14:30:45 2024
+Object-Oriented Code Refactoring
+Practical session on improving code quality through refactoring in C++.
+2024-01-31
+16:45
+Tue Jan 2 09:18:02 2024

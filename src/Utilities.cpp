@@ -156,3 +156,8 @@ std::chrono::system_clock::time_point convertStringToTimePoint(const std::string
     return std::chrono::system_clock::from_time_t(std::mktime(&tmDateTime));
 }
 
+std::string convertTmToString(const std::tm& timeStruct, const std::string& format) {
+    std::stringstream ss;
+    ss << std::put_time(&timeStruct, format.c_str());
+    return ss.str();
+}

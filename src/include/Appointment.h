@@ -78,7 +78,7 @@ private:
     // Utility functions for entering Appointment details
     string enterAppointmentTitle() const;
     string enterAppointmentNote() const;
-    string enterAppointmentDate() const;
+    string enterAppointmentDate(bool accept_past) const;
     string enterAppointmentTime() const;
 
     // utilitis for listAndSortAppointments
@@ -91,6 +91,7 @@ private:
     std::string enterMonth() const;
     bool isValidMonthFormat(const std::string& month) const;
     void displayUpcomingAppointmentsDetailed(const std::vector<Appointment>& appointments, const std::string& type) const;
+    std::vector<Appointment> sortAppointmentsByDate(const std::vector<Appointment>& appointments);
 };
 
 #endif // APPOINTMENT_H

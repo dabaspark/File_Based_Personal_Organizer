@@ -118,9 +118,7 @@ void TaskManager::listAndSortTasks() {
             });
             break;
         case 2:
-            std::sort(tasks.begin(), tasks.end(), [](const Task& a, const Task& b) {
-                return a.deadline < b.deadline;
-            });
+            tasks = sortTasksByDate(tasks);
             break;
         case 3:
             std::sort(tasks.begin(), tasks.end(), [](const Task& a, const Task& b) {
@@ -651,4 +649,31 @@ void TaskManager::displayTasksDetailed(const std::vector<Task>& tasks, bool clea
         std::cout << std::setw(columnWidth) << (task.completed ? "Yes" : "No");
         std::cout << std::setw(columnWidth) << task.creationDate << "\n";
     }
+}
+
+// function sorttasksByDate // it should sort 2024-1-1 before 2024-01-05
+std::vector<Task> TaskManager::sortTasksByDate(const std::vector<Task>& tasks){
+    std::vector<Task> sortedTasks = tasks;
+
+    std::sort(sortedTasks.begin(), sortedTasks.end(), [](const Task& a, const Task& b) {
+        std::tm deadlineDateA = {};
+        std::tm deadlineDateB = {};
+        std::istringstream ssA(a.deadline);
+        std::istringstream ssB(b.deadline);
+
+        // Parse the deadline components manually
+        ssA >> std::get_time(&deadlineDateA, "%Y-%m-%d");
+        ssB >> std::get_time(&deadlineDateB, "%Y-%m-%d");
+
+        // Check if the extracted date components are valid
+        if (isValidDate(deadlineDateA.tm_year + 1900, deadlineDateA.tm_mon + 1, deadlineDateA.tm_mday) &&
+            isValidDate(deadlineDateB.tm_year + 1900, deadlineDateB.tm_mon + 1, deadlineDateB.tm_mday)) {
+            // Compare the deadline dates
+            return std::mktime(&deadlineDateA) < std::mktime(&deadlineDateB);
+        }
+
+        return false; // Invalid date format, handled separately
+    });
+
+    return sortedTasks;
 }
