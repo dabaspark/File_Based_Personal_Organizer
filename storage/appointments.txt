@@ -1,5 +1,5 @@
 First Appointment
-note 1
+sdsd
 2023-12-19
 16:30
 Mon Dec 18 22:28:15 2023
@@ -223,3 +223,8 @@ Sit for the final exam to demonstrate understanding and mastery of C++ concepts.
 2024-01-14
 14:00
 Sat Jan 13 11:45:55 2024
+Meeting with supervisor
+Discuss about the proposal
+2024-02-02
+09:09
+Wed Dec 20 20:55:32 2023

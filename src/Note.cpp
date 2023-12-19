@@ -307,6 +307,8 @@ void NoteManager::loadNotesFromFile() {
 }
 
 void NoteManager::displayNotesByCategory() const {
+    print_menu_header("Main Menu >> Notes Menu >> Display Notes By Category", true);
+
     // Display a list of available categories
     std::cout << "Available Categories:\n";
     for (size_t i = 0; i < previousCategories.size(); ++i) {
@@ -356,7 +358,15 @@ void NoteManager::runWindow_Note() {
         std::cout << "4. Edit Notes\n";
         std::cout << "5. Delete Notes\n";
         std::cout << "6. Search Notes by Keyword\n";
-        std::cout << "7. Save Current Changes to the File\n";
+
+        std::cout << "7. ";
+        if (unsavedChanges) {
+            std::cout << "\033[1;31mSave Current Changes to the File\033[0m";
+        } else {
+            std::cout << "Save Current Changes to the File";
+        }
+        std::cout << "\n";
+
         std::cout << "8. Go Back to Main Menu\n";
 
         choice = getValidChoice(1, 8);

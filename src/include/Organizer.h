@@ -5,7 +5,7 @@
 #include "Appointment.h"
 #include "Note.h"
 #include "Utilities.h"
-
+#include <algorithm>  
 
 class Organizer {
 public:
@@ -17,6 +17,10 @@ public:
 
     // Function to display the main menu
     void displayMainMenu();
+
+    // Function to display reminders
+    std::tuple<int, int, std::string> Reminders() const;
+    void displayReminders() const;
 
 private:
     TaskManager taskManager;

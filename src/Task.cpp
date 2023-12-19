@@ -456,7 +456,15 @@ void TaskManager::runWindow_Task() {
         std::cout << "5. Mark Task as Completed\n";
         std::cout << "6. Search Tasks by Keyword\n";
         std::cout << "7. Sort Tasks\n";
-        std::cout << "8. Save Current Changes to the File\n";
+
+        std::cout << "8. ";
+        if (unsavedChanges) {
+            std::cout << "\033[1;31mSave Current Changes to the File\033[0m";
+        } else {
+            std::cout << "Save Current Changes to the File";
+        }
+        std::cout << "\n";
+
         std::cout << "9. Go Back to Main Menu\n";
         //std::cout << "9. Save and Quit\n";
         //std::cout << "10. Quit without Saving\n";

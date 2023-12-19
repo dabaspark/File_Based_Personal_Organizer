@@ -446,7 +446,15 @@ void AppointmentManager::runWindow_Appointment() {
         std::cout << "5. Delete an Appointment\n";
         std::cout << "6. Search Appointments by Keyword\n";
         std::cout << "7. Sort Appointments\n";
-        std::cout << "8. Save Current Changes to the File\n";
+
+        std::cout << "8. ";
+        if (unsavedChanges) {
+            std::cout << "\033[1;31mSave Current Changes to the File\033[0m";
+        } else {
+            std::cout << "Save Current Changes to the File";
+        }
+        std::cout << "\n";
+
         std::cout << "9. Go Back to Main Menu\n";
         
         choice = getValidChoice(1, 9);
