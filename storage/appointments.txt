@@ -3,3 +3,58 @@ note 1
 2023-12-19
 16:30
 Mon Dec 18 22:28:15 2023
+Object-Oriented Basics Lecture
+Introduction to key concepts and principles of object-oriented programming in C++.
+2023-12-21
+16:30
+Mon Dec 18 22:28:15 2023
+C++ Project Kick-off Meeting
+Discussion and planning for the semester-long C++ programming project.
+2023-12-23
+14:00
+Tue Dec 19 11:40:56 2023
+Code Review Session
+Peer code review to enhance coding skills and reinforce best practices.
+2024-01-02
+09:30
+Wed Dec 20 08:15:30 2023
+Guest Lecture on C++ Design Patterns
+Special lecture by Professor Jingwei Li covering essential design patterns in C++.
+2024-01-10
+15:45
+Thu Dec 21 16:22:10 2023
+Midterm Exam Preparation Workshop
+Guidance and tips for preparing for the midterm exam in the C++ course.
+2024-01-15
+13:00
+Fri Dec 22 10:55:45 2023
+Object-Oriented Design Lab
+Hands-on lab session focusing on designing and implementing object-oriented solutions.
+2024-01-25
+11:15
+Sat Dec 23 19:37:28 2023
+C++ Project Progress Review
+Check-in meeting to review and discuss the progress of the semester-long C++ projects.
+2024-02-03
+18:00
+Sun Dec 24 14:09:02 2023
+Guest Speaker: Industry Applications of C++
+Insights from a guest speaker on real-world applications of C++ in the industry.
+2024-02-12
+10:45
+Mon Dec 25 09:18:40 2023
+Final Exam Review Session
+Comprehensive review session to prepare for the final exam in the C++ course.
+2024-02-20
+19:30
+Tue Dec 26 20:05:14 2023
+Course Feedback and Q&A Session
+Opportunity for students to provide feedback and seek clarification on course topics.
+2024-03-05
+14:30
+Wed Dec 27 11:30:22 2023
+Second Appointment
+Note 2
+2024-1-5
+22:00
+Tue Dec 19 11:40:56 2023

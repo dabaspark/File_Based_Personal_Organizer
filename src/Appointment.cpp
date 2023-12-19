@@ -426,49 +426,53 @@ void AppointmentManager::runWindow_Appointment() {
 
         std::cout << "====================\n";
         std::cout << "1. Add Appointment\n";
-        std::cout << "2. Display Appointments\n";
-        std::cout << "3. Edit an Appointment\n";
-        std::cout << "4. Delete an Appointment\n";
+        std::cout << "2. View Upcoming Appointments in Daily/weekly/monthly Format\n";
 
-        std::cout << "5. Search Appointments by Keyword\n";
-        std::cout << "6. Sort Appointments\n";
-        std::cout << "7. Save Current Changes to the File\n";
-        std::cout << "8. Go Back to Main Menu\n";
+        std::cout << "3. Display All Appointments\n";
+        std::cout << "4. Edit an Appointment\n";
+        std::cout << "5. Delete an Appointment\n";
+        std::cout << "6. Search Appointments by Keyword\n";
+        std::cout << "7. Sort Appointments\n";
+        std::cout << "8. Save Current Changes to the File\n";
+        std::cout << "9. Go Back to Main Menu\n";
         
-        choice = getValidChoice(1, 8);
+        choice = getValidChoice(1, 9);
 
         switch (choice) {
             case 1:
                 addAppointment();
                 break;
             case 2:
-                displayAppointments();
+                displayUpcomingAppointments();
                 break;
             case 3:
-                editAppointment();
+                displayAppointments();
                 break;
             case 4:
+                editAppointment();
+                break;
+            case 5:
                 deleteAppointment();
                 break;
 
-            case 5:
+            case 6:
                 searchAppointmentsByKeyword();
                 break;
-            case 6:
+            case 7:
                 listAndSortAppointments();
                 break;
-            case 7:
+            case 8:
                 saveAppointmentsToFile();
                 std::cout << "Appointments saved. \n";
                 unsavedChanges = false;
                 break;
-            case 8:
+            case 9:
                 std::cout << "Going to the Main Menu.\n";
                 break;
             default:
-                std::cout << "Invalid choice. Please enter a number between 1 and 8.\n";
+                std::cout << "Invalid choice. Please enter a number between 1 and 9.\n";
         }
-    } while (choice != 8);
+    } while (choice != 9);
 }
 
 // Utility functions for entering Appointments details
@@ -670,6 +674,7 @@ void AppointmentManager::displayUpcomingAppointmentsDetailed(const std::vector<A
         return;
     }
 
+    
     // Display header based on the type (daily, weekly, monthly)
     std::string header;
     if (type == "daily") {
@@ -680,21 +685,22 @@ void AppointmentManager::displayUpcomingAppointmentsDetailed(const std::vector<A
         header = "Monthly Appointments - " + appointments[0].date.substr(0, 7);
     }
 
+    std::cout << "---------------------------------------------\n";
     std::cout << header << "\n\n";
-
+    std::cout << "---------------------------------------------\n";
     // Display each appointment
     for (size_t i = 0; i < appointments.size(); ++i) {
         const Appointment& app = appointments[i];
 
         // Display day for weekly appointments
-        if (type == "weekly" && i == 0) {
-            std::string dayOfWeek = getDayOfWeek(app.date);
-            std::cout << dayOfWeek << ":\n";
-        }
+        std::string dayOfWeek = getDayOfWeek(app.date);
+        std::cout << dayOfWeek << ":\n";
 
         // Display each appointment's details
         std::cout << i + 1 << ". " << app.title << " - " << app.time << "\n";
+        std::cout << "   Date: " << app.date << "\n";
         std::cout << "   Notes: " << app.note << "\n\n";
+        
     }
 }
 

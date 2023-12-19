@@ -455,7 +455,7 @@ void TaskManager::runWindow_Task() {
 
         std::cout << "====================\n";
         std::cout << "1. Add Task\n";
-        std::cout << "2. Display Tasks\n";
+        std::cout << "2. Display All Tasks\n";
         std::cout << "3. Edit a Task\n";
         std::cout << "4. Delete a Task\n";
         std::cout << "5. Mark Task as Completed\n";
