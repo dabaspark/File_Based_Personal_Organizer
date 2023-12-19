@@ -529,10 +529,17 @@ std::string AppointmentManager::enterAppointmentDate(bool accept_past) const {
         std::getline(std::cin, date);
         if (date.empty()) {
             std::cout << "Error: date cannot be empty. Please enter a valid date (YYYY-MM-DD): ";
-        } else if (!isValidDateFormat(date)) {
-            std::cout << "Error: Invalid date format. Please enter a valid date (YYYY-MM-DD): ";
-        } else if (isPast(date) && !accept_past) {
-            std::cout << "Error: Appointment Date cannot be in the past. Please enter a future date: ";
+        } else {
+            // Check if the date format is "YYYY-M-D" and convert it to "YYYY-MM-DD"
+            if (isValidYearMonthDayFormat(date)) {
+                date = convertToYYYYMMDDFormat(date);
+            }
+
+            if (!isValidDateFormat(date)) {
+                std::cout << "Error: Invalid date format. Please enter a valid date (YYYY-MM-DD): ";
+            } else if (isPast(date) && !accept_past) {
+                std::cout << "Error: Appointment Date cannot be in the past. Please enter a future date: ";
+            }
         }
 
     } while (date.empty() || !isValidDateFormat(date) || (isPast(date) && !accept_past) );
@@ -647,10 +654,30 @@ void AppointmentManager::displayAppointmentsWeekly(const std::string& startDate)
 }
 
 void AppointmentManager::displayAppointmentsMonthly(const std::string& month) const {
+    // Print the original month
+    std::cout << "month: " << month << std::endl;
+
+    // Convert month to "YYYY-MM" format
+    std::stringstream ss(month);
+    std::tm time = {};
+    ss >> std::get_time(&time, "%Y-%m");
+
+    if (ss.fail()) {
+        std::cerr << "Invalid month format: " << month << std::endl;
+        return;
+    }
+
+    std::ostringstream oss;
+    oss << std::put_time(&time, "%Y-%m");
+    std::string formattedMonth = oss.str();
+
+    // Print the formatted month
+    std::cout << "formattedMonth: " << formattedMonth << std::endl;
+
     // Filter appointments for the specified month
     std::vector<Appointment> monthlyAppointments;
     std::copy_if(appointments.begin(), appointments.end(), std::back_inserter(monthlyAppointments),
-                 [&month](const Appointment& app) { return app.date.substr(0, 7) == month; });
+                 [&formattedMonth](const Appointment& app) { return app.date.substr(0, 7) == formattedMonth; });
 
     // Display the appointments for the month
     displayUpcomingAppointmentsDetailed(monthlyAppointments, "monthly");
@@ -724,3 +751,5 @@ std::vector<Appointment> AppointmentManager::sortAppointmentsByDate(const std::v
 
     return sortedAppointments;
 }
+
+

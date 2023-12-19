@@ -37,4 +37,9 @@ std::chrono::system_clock::time_point convertStringToTimePoint(const std::string
 
 std::string convertTmToString(const std::tm& timeStruct, const std::string& format);
 
+// Helper function to check if the date format is "YYYY-M-D"
+bool isValidYearMonthDayFormat(const std::string& date);
+// Helper function to convert "YYYY-M-D" to "YYYY-MM-DD"
+std::string convertToYYYYMMDDFormat(const std::string& date);
+
 #endif // UTILITIES_H

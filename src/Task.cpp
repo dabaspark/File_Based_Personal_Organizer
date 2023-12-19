@@ -555,10 +555,17 @@ std::string TaskManager::enterTaskDeadline() const {
         std::getline(std::cin, deadline);
         if (deadline.empty()) {
             std::cout << "Error: Deadline cannot be empty. Please enter a valid deadline (YYYY-MM-DD): ";
-        } else if (!isValidDateFormat(deadline)) {
-            std::cout << "Error: Invalid date format. Please enter a valid deadline (YYYY-MM-DD): ";
-        } else if (isPast(deadline)) {
-            std::cout << "Error: Deadline cannot be in the past. Please enter a future deadline: ";
+        } else {
+            // Check if the deadline format is "YYYY-M-D" and convert it to "YYYY-MM-DD"
+            if (isValidYearMonthDayFormat(deadline)) {
+                deadline = convertToYYYYMMDDFormat(deadline);
+            }
+
+            if (!isValidDateFormat(deadline)) {
+                std::cout << "Error: Invalid date format. Please enter a valid deadline (YYYY-MM-DD): ";
+            } else if (isPast(deadline)) {
+                std::cout << "Error: Deadline cannot be in the past. Please enter a future deadline: ";
+            }
         }
     } while (deadline.empty() || !isValidDateFormat(deadline) || isPast(deadline));
     return deadline;

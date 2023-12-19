@@ -161,3 +161,24 @@ std::string convertTmToString(const std::tm& timeStruct, const std::string& form
     ss << std::put_time(&timeStruct, format.c_str());
     return ss.str();
 }
+
+// Helper function to check if the date format is "YYYY-M-D"
+bool isValidYearMonthDayFormat(const std::string& date) {
+    std::regex regexPattern(R"(\d{4}-\d{1,2}-\d{1,2})");
+    return std::regex_match(date, regexPattern);
+}
+
+// Helper function to convert "YYYY-M-D" to "YYYY-MM-DD"
+std::string convertToYYYYMMDDFormat(const std::string& date) {
+    std::tm time = {};
+    std::stringstream ss(date);
+    ss >> std::get_time(&time, "%Y-%m-%d");
+
+    if (ss.fail()) {
+        return date; // Return the original date if conversion fails
+    }
+
+    std::ostringstream oss;
+    oss << std::put_time(&time, "%Y-%m-%d");
+    return oss.str();
+}
