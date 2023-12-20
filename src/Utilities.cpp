@@ -95,10 +95,10 @@ void print_menu_tail(const std::string& go_back_to, bool clear_screen){
 
 
 bool isValidTimeFormat(const std::string& time) {
-    // Define the expected time format
-    std::regex timeFormat(R"([0-9]{2}:[0-9]{2})");
+    // Simplified time format allowing for single digits
+    std::regex timeFormat(R"([0-2]?[0-9]:[0-5]?[0-9])");
 
-    // Check if the entered time matches the expected format
+    // Check if the entered time matches the updated format
     return std::regex_match(time, timeFormat);
 }
 
@@ -182,3 +182,4 @@ std::string convertToYYYYMMDDFormat(const std::string& date) {
     oss << std::put_time(&time, "%Y-%m-%d");
     return oss.str();
 }
+

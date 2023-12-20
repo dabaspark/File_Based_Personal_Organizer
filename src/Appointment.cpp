@@ -577,7 +577,22 @@ std::string AppointmentManager::enterAppointmentTime() const {
             std::cout << "Error: Invalid time format. Please enter a valid time (HH:MM): ";
         }
     } while (time.empty() || !isValidTimeFormat(time));
-    return time;
+
+    // Format the time to ensure it is in "HH:MM" format
+    std::tm tm = {}; // Initialize tm structure to zero
+    std::stringstream ss(time);
+    ss >> std::get_time(&tm, "%H:%M");
+
+    // If the stringstream successfully parsed the time, reformat it
+    if (ss.fail()) {
+        std::cerr << "Error: Unable to parse time. Using the entered time as is.\n";
+        return time;
+    }
+
+    // Format the time to "HH:MM" and return
+    std::stringstream formattedTime;
+    formattedTime << std::put_time(&tm, "%H:%M");
+    return formattedTime.str();
 }
 
 // utilitis for listAndSortAppointments
