@@ -57,6 +57,9 @@ public:
     // Function to display notes by category
     void displayNotesByCategory() const;
 
+    // Function to export notes to CSV
+    void exportNotesToCSV(const std::string& filename) const;
+
 
 private:
     std::string note_filename;
@@ -70,6 +73,8 @@ private:
 
     // Utility functions for displaying note details
     void displayNotesDetailed(const std::vector<Note>& notes, bool clearScreen);
+
+
 };
 
 #endif // NOTE_H

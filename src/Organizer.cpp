@@ -88,10 +88,11 @@ void Organizer::displayMainMenu() {
         }
         std::cout << "\n";
 
-        std::cout << "6. Save and Quit\n";
-        std::cout << "7. Quit without Saving\n";
+        std::cout << "6. Export Data to CSV\n";
+        std::cout << "7. Save and Quit\n";
+        std::cout << "8. Quit without Saving\n";
 
-        choice = getValidChoice(1, 7);
+        choice = getValidChoice(1, 8);
 
         switch (choice) {
             case 1:
@@ -117,6 +118,10 @@ void Organizer::displayMainMenu() {
                 std::cout << "Changes Saved.\n";
                 break;
             case 6:
+                exportDataToCSV();
+                std::cout << "Data exported to CSV.\n";
+                break;
+            case 7:
                 taskManager.saveTasksToFile();
                 appointmentManager.saveAppointmentsToFile();
                 noteManager.saveNotesToFile();
@@ -126,7 +131,7 @@ void Organizer::displayMainMenu() {
                 unsavedChanges_organizer = false;
                 std::cout << "Changes Saved. Quitting...\n";
                 break;
-            case 7:
+            case 8:
                 if(unsavedChanges_organizer) {
                     std::cout << "Changes not saved. Are you sure you want to quit? (y/n): ";
                     char confirm;
@@ -144,9 +149,9 @@ void Organizer::displayMainMenu() {
                     std::cout << "Exiting program.\n";
                 }
             default:
-                std::cout << "Invalid choice. Please enter a number between 1 and 7.\n";
+                std::cout << "Invalid choice. Please enter a number between 1 and 8.\n";
         }
-    } while (choice != 6 && choice != 7);
+    } while (choice != 7 && choice != 8);
 }
 
 
@@ -248,7 +253,7 @@ bool Organizer::enterPassword() {
     std::cout << "File-Based Personal Organizer is a program that helps you organize your tasks, appointments, and notes.\n";
     std::cout << "You can also view reminders for upcoming tasks and appointments.\n";
     std::cout << "All your data will be saved to files.\n";
-    std::cout << "The default passward of the orgnizer is 123456.\n";
+    std::cout << "The passward of the organizer is \033[1;31m 123456 \033[0m.\n";
     std::cout << "========================================\n";
 
 
@@ -288,3 +293,31 @@ bool Organizer::enterPassword() {
 bool Organizer::checkPassword(const std::string& enteredPassword) const {
     return password == enteredPassword;
 }
+
+// function to export files to CSV
+void Organizer::exportDataToCSV() const {
+    print_menu_header("Main Menu >> Export Data to CSV", true);
+
+    // Information about the place for the exported files
+    std::cout << "The exported files will be placed in the same directory as the program.\n";
+    std::cout << "The exported files will be named \"tasks.csv\", \"appointments.csv\", and \"notes.csv\".\n";
+
+    // get confirmation to export y/n
+    std::cout << "Are you sure you want to export the data to CSV? (y/n): ";
+    char confirm;
+    std::cin >> confirm;
+    cin.ignore(1, '\n');
+    if(confirm == 'y' || confirm == 'Y') {
+        std::cout << "Exporting data to CSV...\n";
+    } else {
+        std::cout << "Exporting cancelled.\n";
+        print_menu_tail("Main Menu", true);
+        return;
+    }
+
+    taskManager.exportTasksToCSV("tasks.csv");
+    appointmentManager.exportAppointmentsToCSV("appointments.csv");
+    noteManager.exportNotesToCSV("notes.csv");
+    print_menu_tail("Main Menu", true);
+}
+

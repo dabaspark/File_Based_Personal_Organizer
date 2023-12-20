@@ -69,6 +69,9 @@ public:
     // Function to sort tasks
     void listAndSortTasks();
 
+    // Function to export to CSV
+    void exportTasksToCSV(const std::string& filename) const;
+
 private:
     std::string task_filename;
 

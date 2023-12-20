@@ -688,3 +688,20 @@ std::vector<Task> TaskManager::sortTasksByDate(const std::vector<Task>& tasks){
 
     return sortedTasks;
 }
+
+// Function to export data to CSV
+void TaskManager::exportTasksToCSV(const std::string& filename) const {
+    std::ofstream file(filename);
+
+    if (file.is_open()) {
+        for (const Task& task : tasks) {
+            file << task.title << "," << task.description << "," << task.deadline << ","
+                 << task.priority << "," << task.completed << "," << task.creationDate << "\n";
+        }
+        std::cout << "Tasks exported to CSV file.\n";
+    } else {
+        cout << "Error: Unable to export tasks to CSV file.\n";
+    }
+
+    file.close();
+}

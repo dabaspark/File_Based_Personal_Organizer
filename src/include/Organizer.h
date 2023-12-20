@@ -29,6 +29,10 @@ public:
     bool enterPassword();
     bool checkPassword(const std::string& enteredPassword) const;
 
+    // Function to export data to CSV
+    void exportDataToCSV() const;
+
+
 private:
     TaskManager taskManager;
     AppointmentManager appointmentManager;

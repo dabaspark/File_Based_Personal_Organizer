@@ -529,3 +529,18 @@ void NoteManager::displayNotesDetailed(const std::vector<Note>& notes, bool clea
         std::cout << std::setw(columnWidth) << truncatedCreationDate << "\n";
     }
 }
+
+void NoteManager::exportNotesToCSV(const std::string& filename) const {
+    std::ofstream file(filename);
+
+    if (file.is_open()) {
+        for (const Note& note : notes) {
+            file << note.title << "," << note.category << "," << note.content << "\n";
+        }
+        std::cout << "Notes exported to CSV file.\n";
+    } else {
+        std::cout << "Error: Unable to export notes to CSV file.\n";
+    }
+
+    file.close();
+}

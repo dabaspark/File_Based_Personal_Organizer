@@ -840,4 +840,18 @@ std::vector<Appointment> AppointmentManager::sortAppointmentsByDate(const std::v
     return sortedAppointments;
 }
 
+void AppointmentManager::exportAppointmentsToCSV(const std::string& filename) const {
+    std::ofstream file(filename);
 
+    if (file.is_open()) {
+        for (const Appointment& appointment : appointments) {
+            file << appointment.title << "," << appointment.date << "," << appointment.time << ","
+                 << appointment.note << "," << appointment.creationDate <<"\n";
+        }
+        std::cout << "Appointments exported to CSV file.\n";
+    } else {
+        cout << "Error: Unable to export appointments to CSV file.\n";
+    }
+
+    file.close();
+}

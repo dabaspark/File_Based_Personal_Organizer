@@ -76,6 +76,9 @@ public:
     // Function to sort tasks
     void listAndSortAppointments();
 
+    // Function to export to CSV
+    void exportAppointmentsToCSV(const std::string& filename) const;
+
 private:
     std::string appointment_filename;
 
