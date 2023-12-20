@@ -6,6 +6,9 @@
 #include "Note.h"
 #include "Utilities.h"
 #include <algorithm>  
+#include <termios.h>
+#include <unistd.h>
+
 
 class Organizer {
 public:
@@ -22,11 +25,18 @@ public:
     std::tuple<int, int, std::string> Reminders() const;
     void displayReminders() const;
 
+    // Function for passward protection
+    bool enterPassword();
+    bool checkPassword(const std::string& enteredPassword) const;
+
 private:
     TaskManager taskManager;
     AppointmentManager appointmentManager;
     NoteManager noteManager;
     bool unsavedChanges_organizer;
+
+    std::string password;
+    bool passwordEntered;
 };
 
 #endif // ORGANIZER_H

@@ -6,6 +6,8 @@ Organizer::Organizer(const std::string& taskFilename, const std::string& appoint
     : taskManager(taskFilename), appointmentManager(appointmentFilename), noteManager(noteFilename) {
     // Constructor implementation
     unsavedChanges_organizer = false;
+    password = "123456";
+    passwordEntered = false;
 }
 
 Organizer::~Organizer() {
@@ -15,6 +17,13 @@ Organizer::~Organizer() {
 
 void Organizer::displayMainMenu() {
     int choice;
+
+    // Check if the password has been entered
+    if (!passwordEntered) {
+        if (!enterPassword()) {
+            return;
+        }
+    }
 
     do {
         // Get the upcoming number of tasks and appointments within three days
@@ -220,4 +229,62 @@ void Organizer::displayReminders() const{
     }
 
     print_menu_tail("Main Menu", true);
+}
+
+
+// Inside the Organizer class definition
+bool Organizer::enterPassword() {
+    std::system("clear");
+
+    // Welecoming message to File-Based Personal Organizer
+    // fancy style
+    std::cout << "========================================\n";
+    std::cout << "\033[1;31m";
+    std::cout << "Welcome to File-Based Personal Organizer!\n";
+    std::cout << "\033[0m";
+    std::cout << "========================================\n";
+
+    /// what is the file based personal organizer?
+    std::cout << "File-Based Personal Organizer is a program that helps you organize your tasks, appointments, and notes.\n";
+    std::cout << "You can also view reminders for upcoming tasks and appointments.\n";
+    std::cout << "All your data will be saved to files.\n";
+    std::cout << "The default passward of the orgnizer is 123456.\n";
+    std::cout << "========================================\n";
+
+
+    std::string enteredPassword;
+
+    // Prompt for password
+    std::cout << "Enter the password to access the organizer: ";
+
+    struct termios oldt, newt;
+    tcgetattr(STDIN_FILENO, &oldt); // Save current terminal settings
+
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO); // Turn off canonical mode and echoing
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Apply new settings
+
+    char c;
+    while (std::cin.get(c) && c != '\n') {
+        std::cout << '*';
+        std::cout.flush(); // Ensure the '*' is immediately printed without buffering
+        enteredPassword += c;
+    }
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore old settings
+
+    std::cout << std::endl; // Move to the next line after password entry
+
+    // Check password
+    if (!checkPassword(enteredPassword)) {
+        std::cout << "Incorrect password. Access denied.\n";
+        return false;
+    }
+
+    passwordEntered = true; // Set the flag to true after entering the password
+    return true;
+}
+
+bool Organizer::checkPassword(const std::string& enteredPassword) const {
+    return password == enteredPassword;
 }
